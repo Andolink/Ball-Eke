@@ -1,0 +1,390 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.Mathematics;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Scripting.APIUpdating;
+
+public class Player : MonoBehaviour
+{
+    #region VARIABLES
+    [Header("Important")]
+
+    [SerializeField] private Transform targetPosition;
+    [SerializeField] private CapsuleCollider ownCollider;
+    [SerializeField] private ParticleSystem speedParticules;
+
+    [Header("Input System")]
+
+    [SerializeField] private InputActionReference moveAction;
+    [SerializeField] private InputActionReference jumpAction;
+    [SerializeField] private InputActionReference dashAction;
+    [SerializeField] private InputActionReference slideAction;
+    [SerializeField] private InputActionReference slowmoAction;
+    [SerializeField] private InputActionReference PunchAction;
+    [SerializeField] private InputActionReference HookAction;
+    
+    [Header("Grab")]
+
+    [SerializeField] private float grabRange = 3f;
+    [SerializeField] private float trowForce = 10f;
+    [SerializeField] private float ownVelocityTrowFactor = 2f;
+    [SerializeField] private Transform holder;
+    [SerializeField] private Transform lookAt;
+    private Grabable grabedObject = null;
+
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float dashSpeed;
+
+    [Header("Jumping")]
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float jumpCooldown;
+    [SerializeField] private float airMultiplier;
+    [SerializeField] private float wallJumpSpeedFactor;
+    [SerializeField] private float coyoteTime = 0f;
+    [SerializeField] private float jumpBuffer = 0f;
+   
+    private bool readyToJump;
+    private bool isJumping;
+
+    [Header("Slide")]
+    [SerializeField] private float crouchSpeed;
+    [SerializeField] private float crouchYScale;
+    private float defaultColliderHeight;
+
+    [Header("Ground Check")]
+    [SerializeField] private float playerHeight;
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] public bool grounded;
+
+    [SerializeField] private Transform orientation;
+
+    private float speedLimit = 0;
+
+    private Vector3 moveDirection;
+
+    [HideInInspector] public Rigidbody rb;
+    [HideInInspector] public bool isMovedOutside = false;
+    [SerializeField] private float gravity = -20f;
+
+    private bool isSlaming = false;
+    private float gravitySlam = -10f;
+
+    private bool nearWallFound;
+    private bool isMoving = false;
+    private RaycastHit nearWall;
+
+    private float dashVelocityLossTime = 0f;
+    private float playerMovementControls = 1f;
+
+    #endregion
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        readyToJump = true;
+
+        defaultColliderHeight = ownCollider.height;
+    }
+
+    private void Update()
+    {
+        GroundedHandler();
+        MovePlayer();
+        JumpHandler();
+        DashHandler();
+        SpeedControl();
+        SlamHandler();
+
+        GrabHandler();
+        SlowmoHandler();
+    }
+
+// COLLISIONS
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
+    private void MovePlayer()
+    {
+        Vector2 _moveInput = moveAction.action.ReadValue<Vector2>();
+        Vector3 _moveDirectionOld = moveDirection;
+        moveDirection = orientation.forward * _moveInput.y + orientation.right * _moveInput.x;
+        
+        isMoving = (moveDirection != Vector3.zero);
+       
+        if (!isMoving)
+        { moveDirection = _moveDirectionOld; }
+    }
+
+// THINGS
+    private void GroundedHandler()
+    {
+        grounded = Physics.SphereCast(transform.position, 0.45f, Vector3.down,out RaycastHit _rayCast, playerHeight/2 + 0.1f, whatIsGround);
+
+        Vector3 _lookatFoward = orientation.transform.forward.normalized;
+        Vector3 _lookatBackward = -orientation.transform.forward.normalized;
+        Vector3 _lookatLeft = -orientation.transform.right.normalized;
+        Vector3 _lookatRight = orientation.transform.right.normalized;
+
+        nearWallFound = Physics.Raycast(transform.position, _lookatFoward, out nearWall, 1f, whatIsGround);
+        if (!nearWallFound) nearWallFound = Physics.Raycast(transform.position, _lookatBackward, out nearWall, 1f, whatIsGround);
+        if (!nearWallFound) nearWallFound = Physics.Raycast(transform.position, _lookatLeft, out nearWall, 1f, whatIsGround);
+        if (!nearWallFound) nearWallFound = Physics.Raycast(transform.position, _lookatRight, out nearWall, 1f, whatIsGround);
+    }
+    private void SpeedControl()
+    {
+        float _yVelo = Mathf.Lerp(rb.velocity.y, gravity, 8f * Time.deltaTime);
+
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        if (grounded)
+        {
+            if (!isMoving)
+            {
+                speedLimit = Mathf.Lerp(speedLimit, 0, 10f * Time.deltaTime);
+            }
+            else
+            {
+                if (speedLimit < flatVel.magnitude)
+                {
+                    speedLimit = flatVel.magnitude;
+                }
+                else
+                {
+                    speedLimit = Mathf.Lerp(speedLimit, moveSpeed, 5f * Time.deltaTime);
+                }
+            }
+
+        }
+        else
+        {
+            if (isMoving)
+            {
+                if (speedLimit < moveSpeed)
+                { speedLimit = Mathf.Lerp(speedLimit, moveSpeed, 5f * Time.deltaTime); }
+                speedLimit += Time.deltaTime * 2f; 
+            }
+            else
+            {
+                speedLimit = flatVel.magnitude;
+            }
+        }
+
+        playerMovementControls = Mathf.Lerp(playerMovementControls,1f,6f * Time.deltaTime);
+
+        Vector3 _newAimedVelocity = moveDirection.normalized * speedLimit + Vector3.up * _yVelo;
+        rb.velocity = Vector3.Lerp(rb.velocity, _newAimedVelocity, 15f * playerMovementControls * Time.deltaTime);
+        
+        dashVelocityLossTime -= Time.deltaTime;
+        if (dashVelocityLossTime > 0f)
+        {
+            rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 4f * Time.deltaTime);
+            speedLimit = rb.velocity.magnitude;
+        }
+
+        float _val = Mathf.Clamp01(rb.velocity.magnitude - 5f);
+
+        speedParticules.emissionRate = _val * _val * 10f;
+    }
+    public void ResetMovement(Vector3 _velocity)
+    {
+        rb.velocity = _velocity;
+        speedLimit = _velocity.magnitude;
+        moveDirection = _velocity;
+    }
+    public void StopMovedInside()
+    {
+        isMovedOutside = false;
+        rb.isKinematic = false;
+    }
+
+// ACTIONS
+    private void JumpHandler()
+    {
+        coyoteTime -= Time.deltaTime;
+        if (grounded)
+        {
+            coyoteTime = 1;
+        }
+
+        jumpBuffer -= Time.deltaTime;
+        if (jumpAction.action.WasPressedThisFrame())
+        {
+            jumpBuffer = 1f;
+        }
+
+        
+        if (jumpAction.action.WasReleasedThisFrame() && isJumping)
+        {
+            /*
+            if (isJumping && rb.velocity.y > 0)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            }*/
+            isJumping = false;
+        }
+
+        if (jumpBuffer > 0)
+        {
+            if (coyoteTime > 0)
+            {
+                StopMovedInside();
+                isJumping = true;
+
+                float _jumpVelocity = jumpForce + rb.velocity.magnitude * 0.1f;
+
+                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+                rb.AddForce(transform.up * _jumpVelocity, ForceMode.Impulse);
+
+                jumpBuffer = 0;
+                coyoteTime = 0;
+                isSlaming = false;
+                dashVelocityLossTime = 0f;
+                playerMovementControls = .75f;
+                Meter.Instance.AddNewMeterText("Jump",2);
+            }
+            else if (nearWallFound)
+            {
+                isJumping = true;
+                wallJumpSpeedFactor = 0;
+
+                ResetMovement(nearWall.normal * rb.velocity.magnitude);
+                rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+                jumpBuffer = 0;
+                coyoteTime = 0;
+                isSlaming = false;
+                dashVelocityLossTime = 0f;
+                playerMovementControls = 0f;
+                Meter.Instance.AddNewMeterText("Wall-Jump", 2);
+
+            }
+        }
+    }
+    private void SlowmoHandler()
+    {
+        if (slowmoAction.action.ReadValue<float>() == 1)
+        {
+            TimeManager.Instance.Slowmo(-1, 0.25f, -1);
+        }
+        else
+        {
+            TimeManager.Instance.Slowmo(-1, 1, -1);
+        }
+    }
+    private void DashHandler()
+    {
+        if (dashAction.action.WasPressedThisFrame())
+        {
+            TimeManager.Instance.TimeStop(0.05f);
+            float _velocityMagnitude = rb.velocity.magnitude + 2f;
+            if (_velocityMagnitude < dashSpeed)
+            { 
+                _velocityMagnitude = dashSpeed;
+                speedLimit = dashSpeed; 
+            }
+
+            StopMovedInside();
+
+            Vector3 _dir = lookAt.forward;
+            rb.velocity = _dir * _velocityMagnitude;
+            moveDirection = rb.velocity;
+            dashVelocityLossTime = 1f;
+            playerMovementControls = 0f;
+        }
+    }
+    private void SlamHandler()
+    {
+        if (!grounded)
+        {
+            if (slideAction.action.ReadValue<float>() == 1 && isSlaming)
+            {
+                Debug.Log(gravitySlam);
+                gravitySlam -= 100f * Time.deltaTime;
+                rb.velocity = new(rb.velocity.x, gravitySlam, rb.velocity.z);
+            }
+
+            if (slideAction.action.WasPressedThisFrame())
+            {
+                TimeManager.Instance.TimeStop(0.075f);
+                ResetMovement(Vector3.zero);
+                gravitySlam = gravity;
+                isSlaming = true;
+            }
+            else if(slideAction.action.WasReleasedThisFrame() && isSlaming)
+            {
+                TimeManager.Instance.TimeStop(0.075f);
+                rb.velocity = new(rb.velocity.x, 0f, rb.velocity.z); ;
+            }
+        }
+    }
+    
+// GRABING SYSTEM
+    private void GrabHandler()
+    {
+        if (grabedObject != null)
+        {
+            if (PunchAction.action.WasPressedThisFrame())
+            {
+                TrowCurrentObject();
+                TimeManager.Instance.TimeStop(0.25f);
+            }
+        }
+        else
+        {
+            if (HookAction.action.WasPressedThisFrame())
+            {
+                GrabObject();
+                if (grabedObject != null)
+                {
+                    Meter.Instance.AddNewMeterText("Grabed", 10);
+                }
+            }
+        }
+    }
+    private void GrabObject()
+    {
+        RaycastHit _rayCast;
+        if (Physics.Raycast(lookAt.position, lookAt.forward, out _rayCast, grabRange))
+        {
+            if (_rayCast.transform.TryGetComponent(out Grabable _grabable))
+            {
+                _grabable.Take(holder);
+                grabedObject = _grabable;
+            }
+        }
+    }
+    private void TrowCurrentObject()
+    {
+        float _velocity = trowForce;
+        /*
+        Vector3 _currentPosition = transform.position;
+        Vector3 _targetPosition = targetPosition.position;//lookAt.position + lookAt.forward * _velocity;
+
+
+        float _deltaY   = _targetPosition.y - _currentPosition.y;
+        float _maxY     = _deltaY + 2f;
+        float _deltaZ   = _targetPosition.z - _currentPosition.z;
+        float _deltaX   = _targetPosition.x - _currentPosition.x;
+        float _deltaF   = Mathf.Sqrt(_deltaX * _deltaX + _deltaZ * _deltaZ);
+        float _grav     = 9.8f;
+
+        float _y        = Mathf.Sqrt(2 * _grav * _maxY);
+        float _delta    = 2 * _grav * (_maxY - _deltaY);
+        float _f        = (Mathf.Sqrt(_delta)+_y)/ _deltaF;
+        
+        Vector3 _finalDir = lookAt.forward * _f + Vector3.up * _y;
+
+        Debug.Log(string.Format("Foward {0} | Y {1}", _f, _y));
+        */
+        Vector3 _finalDir = lookAt.forward * trowForce + Vector3.up * trowForce * 0.85f;
+
+        grabedObject.transform.position = lookAt.position + lookAt.forward * 1f;
+        grabedObject.Trow(_finalDir);
+        grabedObject = null;
+    }
+}
