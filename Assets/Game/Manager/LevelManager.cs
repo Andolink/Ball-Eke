@@ -14,7 +14,8 @@ public class LevelManager : MonoBehaviour
 
     public int currentCompletedGoals = 0;
     private bool levelEnd = false;
-    [HideInInspector] public bool gameOver = false; 
+    [HideInInspector] public bool gameOver = false;
+    [HideInInspector] public float currentLevelScore = 0;
 
     [SerializeField] private Level currentLoadedLevel;
     [SerializeField] List<GameObject> levelToInstanciate = new List<GameObject>();
@@ -75,6 +76,7 @@ public class LevelManager : MonoBehaviour
     public void LevelStart()
     {
         currentCompletedGoals = 0;
+        currentLevelScore = 0;
         levelEnd = false;
         TimeManager.Instance.SetTimePause(false);
         player.transform.position = currentLoadedLevel.playerSpawn.position;

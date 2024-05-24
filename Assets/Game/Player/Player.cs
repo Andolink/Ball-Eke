@@ -37,7 +37,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float ownVelocityTrowFactor = 2f;
     [SerializeField] private Transform holder;
     [SerializeField] private Transform lookAt;
+    [SerializeField] private LayerMask interactLayerMask;
+
     private Grabable grabedObject = null;
+
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
@@ -83,7 +86,7 @@ public class Player : MonoBehaviour
 
     private float dashVelocityLossTime = 0f;
     private float playerMovementControls = 1f;
-
+    
     #endregion
 
     private void Start()
@@ -260,6 +263,7 @@ public class Player : MonoBehaviour
                 jumpBuffer = 0;
                 coyoteTime = 0;
                 isSlaming = false;
+                grounded = false;
                
                 playerMovementControls = .75f;
                 if (dashVelocityLossTime > 0)
@@ -346,9 +350,9 @@ public class Player : MonoBehaviour
     private void GrabHandler()
     {
         RaycastHit _rayCast;
-        bool doCastBall = (Physics.Raycast(lookAt.position, lookAt.forward, out _rayCast, grabRange));
+        bool doCastBall = (Physics.Raycast(lookAt.position, lookAt.forward, out _rayCast, grabRange, interactLayerMask));
 
-        //cursorAnimator.enabled = doCastBall;
+        cursorAnimator.SetBool("Interact",doCastBall);
 
         if (grabedObject != null)
         {
@@ -365,11 +369,6 @@ public class Player : MonoBehaviour
                 if (doCastBall)
                 {
                     GrabObject(_rayCast);
-                }
-
-                if (grabedObject != null)
-                {
-                    
                 }
             }
         }

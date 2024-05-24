@@ -19,13 +19,14 @@ public class Grabable : MonoBehaviour
     [SerializeField] private Collider ballTrigger = null;
     private MeshRenderer meshRenderer = null;
     private Transform defaultParent = null;
-    
+    private Vector3 defaultPosition;
 
     bool isGrabed = false;
     bool hasBeenGrounded = true;
    
     void Start()
     {
+        defaultPosition = transform.position;
         meshRenderer = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
         defaultParent = transform.parent;
@@ -74,6 +75,13 @@ public class Grabable : MonoBehaviour
         transform.SetParent(defaultParent);
         rb.AddForce(_velocity,ForceMode.VelocityChange);
         isGrabed = false;
+    }
+
+    public void Death()
+    {
+        transform.position = defaultPosition;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     public void OnCollisionEnter(Collision collision)
