@@ -921,6 +921,7 @@ MonoBehaviour:
   levelTimer: 45
   currentCompletedGoals: 0
   gameOver: 0
+  currentLevelScore: 0
   currentLoadedLevel: {fileID: 0}
   levelToInstanciate:
   - {fileID: 9173161788198925382, guid: feac2aaaf9a5eba4db87cb97d5b42582, type: 3}
@@ -2001,6 +2002,26 @@ PrefabInstance:
       propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5658048191690550489, guid: 06d5b2d5f933de544a7ff0f3dcf183e9,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5658048191690550489, guid: 06d5b2d5f933de544a7ff0f3dcf183e9,
+        type: 3}
+      propertyPath: m_ImplicitCom
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5658048191690550489, guid: 06d5b2d5f933de544a7ff0f3dcf183e9,
+        type: 3}
+      propertyPath: m_ImplicitTensor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5658048191690550489, guid: 06d5b2d5f933de544a7ff0f3dcf183e9,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5808679993438019378, guid: 06d5b2d5f933de544a7ff0f3dcf183e9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2059,7 +2080,7 @@ PrefabInstance:
     - target: {fileID: 6007304747157896901, guid: 06d5b2d5f933de544a7ff0f3dcf183e9,
         type: 3}
       propertyPath: jumpForce
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6007304747157896901, guid: 06d5b2d5f933de544a7ff0f3dcf183e9,
         type: 3}

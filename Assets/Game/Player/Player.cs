@@ -1,10 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Scripting.APIUpdating;
 
 public class Player : MonoBehaviour
 {
@@ -76,6 +71,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public Rigidbody rb;
     [HideInInspector] public bool isMovedOutside = false;
     [SerializeField] private float gravity = -20f;
+    private float gravityFactor = 1f;
 
     private bool isSlaming = false;
     private float gravitySlam = -10f;
@@ -86,6 +82,7 @@ public class Player : MonoBehaviour
 
     private float dashVelocityLossTime = 0f;
     private float playerMovementControls = 1f;
+    
     
     #endregion
 
@@ -101,12 +98,14 @@ public class Player : MonoBehaviour
     private void Update()
     {
         GroundedHandler();
+        
         MovePlayer();
-        DashHandler();
         SpeedControl();
-        SlamHandler();
+       
         JumpHandler();
-
+        DashHandler();
+        SlamHandler();
+        
         GrabHandler();
         SlowmoHandler();
     }
@@ -153,7 +152,8 @@ public class Player : MonoBehaviour
     }
     private void SpeedControl()
     {
-        float _yVelo = Mathf.Lerp(rb.velocity.y, gravity, 8f * Time.deltaTime);
+        gravityFactor = Mathf.Lerp(gravityFactor, 1f, 5f * Time.deltaTime);
+        float _yVelo = Mathf.Lerp(rb.velocity.y, gravity, 4f * Time.deltaTime * gravityFactor);
 
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
@@ -209,7 +209,7 @@ public class Player : MonoBehaviour
             _mult = 50f;
         }
 
-        speedParticules.emissionRate = _val * _val * 30f;
+        speedParticules.emissionRate = _val * _val * _mult;
     }
     public void ResetMovement(Vector3 _velocity)
     {
@@ -235,9 +235,8 @@ public class Player : MonoBehaviour
         jumpBuffer -= Time.deltaTime;
         if (jumpAction.action.ReadValue<float>() == 1)
         {
-            jumpBuffer = 0.25f;
+            jumpBuffer = 0.05f;
         }
-
 
         /* if (jumpAction.action.WasReleasedThisFrame() && isJumping)
          {
@@ -259,13 +258,18 @@ public class Player : MonoBehaviour
                 float _jumpVelocity = jumpForce + (rb.velocity.magnitude * 0.1f);
 
                 rb.velocity = new Vector3(rb.velocity.x, _jumpVelocity, rb.velocity.z);
+                moveDirection = rb.velocity;
+                gravityFactor = 0f;
+
+
+                StopMovedInside();
 
                 jumpBuffer = 0;
                 coyoteTime = 0;
                 isSlaming = false;
                 grounded = false;
                
-                playerMovementControls = .75f;
+                playerMovementControls = 1f;
                 if (dashVelocityLossTime > 0)
                 {
                     Meter.Instance.AddNewMeterText("Wave Dash", (int)rb.velocity.magnitude);
@@ -278,13 +282,16 @@ public class Player : MonoBehaviour
                 wallJumpSpeedFactor = 0;
 
                 ResetMovement(nearWall.normal * rb.velocity.magnitude);
-                rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+                rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+                moveDirection = rb.velocity;
 
                 jumpBuffer = 0;
                 coyoteTime = 0;
                 isSlaming = false;
                 dashVelocityLossTime = 0f;
                 playerMovementControls = 0f;
+                gravityFactor = 0f;
+
             }
         }
     }
@@ -317,6 +324,7 @@ public class Player : MonoBehaviour
             rb.velocity = _dir * _velocityMagnitude;
             moveDirection = rb.velocity;
             dashVelocityLossTime = 1f;
+            gravityFactor = 0f;
             playerMovementControls = 0f;
         }
     }
