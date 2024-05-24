@@ -20,6 +20,7 @@ public class MovingPlateform : MonoBehaviour
     void Update()
     {
         Vector3 vect = Axes * Ratio;
+
         // Cyclicle
         if (cyclicle)
         {
@@ -47,6 +48,7 @@ public class MovingPlateform : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Riders.Add(collision.gameObject);
+        collision.gameObject.transform.SetParent(transform);
     }
 
     private void OnCollisionExit(Collision collision)
@@ -56,10 +58,7 @@ public class MovingPlateform : MonoBehaviour
 
     private void Move(Vector3 vect)
     {
+        // Déplacer plateforme
         transform.position += vect;
-        foreach (var go in Riders)
-        {
-            go.transform.position += vect;
-        }
     }
 }
