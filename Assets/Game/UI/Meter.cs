@@ -58,6 +58,8 @@ public class Meter : MonoBehaviour
         _meterText.score = _score;
         _meterText.transform.position = Vector3.zero;
 
+        LevelManager.Instance.currentLevelScore += _score;
+
         meterTexts.Insert(0, _meterText);
     }
 }
