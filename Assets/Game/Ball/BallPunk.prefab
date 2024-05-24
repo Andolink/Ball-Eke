@@ -308,6 +308,9 @@ MonoBehaviour:
   grabedSortingLayer: Weapon
   animator: {fileID: 8824655735388418953}
   mesh: {fileID: 5885750959552185752}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
   rb: {fileID: 0}
   ballCollider: {fileID: 3974308081569528894}
   ballTrigger: {fileID: 4189610714825766854}

@@ -49,13 +49,14 @@ Material:
     - _Cull: 0
     - _Cutoff: 0.183
     - _Max: 2
-    - _Min: 0.1
-    - _OutlineThickness: 6.3
+    - _Min: 0
+    - _OutlineThickness: 0
     - _QueueControl: 0
     - _ReceiveShadows: 0
-    - _Shades: 0.35
+    - _Shades: 0.08
     - _Smoothness: 0
-    m_Colors: []
+    m_Colors:
+    - _OutlineColor: {r: 0.3773585, g: 0, b: 0.34707627, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &4974179746336533322
 MonoBehaviour:

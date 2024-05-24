@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Camera : MonoBehaviour
+public class WorldToScreenPoint : MonoBehaviour
 {
     [SerializeField] private Transform orientation = null;
     [SerializeField] private Transform lookAt = null;

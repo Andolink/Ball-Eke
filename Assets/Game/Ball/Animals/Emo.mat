@@ -49,11 +49,11 @@ Material:
     - _Cull: 0
     - _Cutoff: 0.183
     - _Max: 2
-    - _Min: 0.1
-    - _OutlineThickness: 6.3
+    - _Min: 0
+    - _OutlineThickness: 0
     - _QueueControl: 0
     - _ReceiveShadows: 0
-    - _Shades: 0.35
+    - _Shades: 0.08
     - _Smoothness: 0
     m_Colors: []
   m_BuildTextureStacks: []

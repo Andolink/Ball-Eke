@@ -14,6 +14,11 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform targetPosition;
     [SerializeField] private CapsuleCollider ownCollider;
     [SerializeField] private ParticleSystem speedParticules;
+    [SerializeField] private Animator cursorAnimator;
+
+    [Header("VFX")]
+
+    [SerializeField] private Animator vfxTrow;
 
     [Header("Input System")]
 
@@ -94,20 +99,28 @@ public class Player : MonoBehaviour
     {
         GroundedHandler();
         MovePlayer();
-        JumpHandler();
         DashHandler();
         SpeedControl();
         SlamHandler();
+        JumpHandler();
 
         GrabHandler();
         SlowmoHandler();
     }
 
-// COLLISIONS
-    private void FixedUpdate()
+    public void ResetVar()
     {
-        MovePlayer();
+        if (grabedObject != null)
+        { Destroy(grabedObject.gameObject); }
+        speedLimit = 0f;
+        isSlaming = false;
+        dashVelocityLossTime = 0;
+        moveDirection = Vector3.zero;
+        playerMovementControls = 1f;
+        if (rb) rb.velocity = Vector3.zero;
+        vfxTrow.gameObject.SetActive(false);
     }
+
     private void MovePlayer()
     {
         Vector2 _moveInput = moveAction.action.ReadValue<Vector2>();
@@ -123,7 +136,7 @@ public class Player : MonoBehaviour
 // THINGS
     private void GroundedHandler()
     {
-        grounded = Physics.SphereCast(transform.position, 0.45f, Vector3.down,out RaycastHit _rayCast, playerHeight/2 + 0.1f, whatIsGround);
+        grounded = rb.velocity.y <= 0 && Physics.SphereCast(transform.position, 0.45f, Vector3.down, out RaycastHit _rayCast, playerHeight / 2 + 0.1f, whatIsGround) ;
 
         Vector3 _lookatFoward = orientation.transform.forward.normalized;
         Vector3 _lookatBackward = -orientation.transform.forward.normalized;
@@ -186,9 +199,14 @@ public class Player : MonoBehaviour
             speedLimit = rb.velocity.magnitude;
         }
 
-        float _val = Mathf.Clamp01(rb.velocity.magnitude - 5f);
+        float _mult = 30f;
+        float _val = Mathf.Clamp01(rb.velocity.magnitude - 4f);
+        if (dashVelocityLossTime > 0 || isSlaming)
+        {
+            _mult = 50f;
+        }
 
-        speedParticules.emissionRate = _val * _val * 10f;
+        speedParticules.emissionRate = _val * _val * 30f;
     }
     public void ResetMovement(Vector3 _velocity)
     {
@@ -212,21 +230,21 @@ public class Player : MonoBehaviour
         }
 
         jumpBuffer -= Time.deltaTime;
-        if (jumpAction.action.WasPressedThisFrame())
+        if (jumpAction.action.ReadValue<float>() == 1)
         {
-            jumpBuffer = 1f;
+            jumpBuffer = 0.25f;
         }
 
-        
-        if (jumpAction.action.WasReleasedThisFrame() && isJumping)
-        {
-            /*
-            if (isJumping && rb.velocity.y > 0)
-            {
-                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            }*/
-            isJumping = false;
-        }
+
+        /* if (jumpAction.action.WasReleasedThisFrame() && isJumping)
+         {
+
+             if (isJumping && rb.velocity.y > 0)
+             {
+                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+             }
+        isJumping = false;
+        }*/
 
         if (jumpBuffer > 0)
         {
@@ -235,17 +253,20 @@ public class Player : MonoBehaviour
                 StopMovedInside();
                 isJumping = true;
 
-                float _jumpVelocity = jumpForce + rb.velocity.magnitude * 0.1f;
+                float _jumpVelocity = jumpForce + (rb.velocity.magnitude * 0.1f);
 
-                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddForce(transform.up * _jumpVelocity, ForceMode.Impulse);
+                rb.velocity = new Vector3(rb.velocity.x, _jumpVelocity, rb.velocity.z);
 
                 jumpBuffer = 0;
                 coyoteTime = 0;
                 isSlaming = false;
-                dashVelocityLossTime = 0f;
+               
                 playerMovementControls = .75f;
-                Meter.Instance.AddNewMeterText("Jump",2);
+                if (dashVelocityLossTime > 0)
+                {
+                    Meter.Instance.AddNewMeterText("Wave Dash", (int)rb.velocity.magnitude);
+                    dashVelocityLossTime = 0f;
+                }
             }
             else if (nearWallFound)
             {
@@ -260,8 +281,6 @@ public class Player : MonoBehaviour
                 isSlaming = false;
                 dashVelocityLossTime = 0f;
                 playerMovementControls = 0f;
-                Meter.Instance.AddNewMeterText("Wall-Jump", 2);
-
             }
         }
     }
@@ -326,6 +345,11 @@ public class Player : MonoBehaviour
 // GRABING SYSTEM
     private void GrabHandler()
     {
+        RaycastHit _rayCast;
+        bool doCastBall = (Physics.Raycast(lookAt.position, lookAt.forward, out _rayCast, grabRange));
+
+        //cursorAnimator.enabled = doCastBall;
+
         if (grabedObject != null)
         {
             if (PunchAction.action.WasPressedThisFrame())
@@ -338,24 +362,24 @@ public class Player : MonoBehaviour
         {
             if (HookAction.action.WasPressedThisFrame())
             {
-                GrabObject();
+                if (doCastBall)
+                {
+                    GrabObject(_rayCast);
+                }
+
                 if (grabedObject != null)
                 {
-                    Meter.Instance.AddNewMeterText("Grabed", 10);
+                    
                 }
             }
         }
     }
-    private void GrabObject()
+    private void GrabObject(RaycastHit _rayCast)
     {
-        RaycastHit _rayCast;
-        if (Physics.Raycast(lookAt.position, lookAt.forward, out _rayCast, grabRange))
+        if (_rayCast.transform.TryGetComponent(out Grabable _grabable))
         {
-            if (_rayCast.transform.TryGetComponent(out Grabable _grabable))
-            {
-                _grabable.Take(holder);
-                grabedObject = _grabable;
-            }
+            _grabable.Take(holder);
+            grabedObject = _grabable;
         }
     }
     private void TrowCurrentObject()
@@ -386,5 +410,7 @@ public class Player : MonoBehaviour
         grabedObject.transform.position = lookAt.position + lookAt.forward * 1f;
         grabedObject.Trow(_finalDir);
         grabedObject = null;
+
+        vfxTrow.gameObject.SetActive(true);
     }
 }
