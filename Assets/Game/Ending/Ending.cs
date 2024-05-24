@@ -21,9 +21,19 @@ public class Ending : MonoBehaviour
         {
             if (ball.transform.position.y <= transform.position.y && !isCompleted)
             {
-                LevelManager.Instance.LevelEnd();
-                Meter.Instance.AddNewMeterText("Panier", 100);
+                LevelManager.Instance.gameOver = false;
+                LevelManager.Instance.currentCompletedGoals++;
+
+                float _bonusScore = ball.rb.velocity.magnitude * ball.rb.velocity.magnitude;
+
+                if (_bonusScore >= 100f) Meter.Instance.AddNewMeterText("VeloCity's PREMIUM", (int)_bonusScore);
+
+                if (ball.rebond == 0)
+                { Meter.Instance.AddNewMeterText("BALEK!!", 300); }
+                else
+                { Meter.Instance.AddNewMeterText("Ball-Eke!", 100); }
                 isCompleted = true;
+
             }
             else
             {
@@ -39,7 +49,7 @@ public class Ending : MonoBehaviour
         {
             isBallInside = true;
             ball = _ball;
-            Meter.Instance.AddNewMeterText("???", 10);
+            Meter.Instance.AddNewMeterText("???", 1);
         }
     }
 

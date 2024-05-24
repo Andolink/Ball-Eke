@@ -10,16 +10,19 @@ public class Grabable : MonoBehaviour
     [SerializeField] private string grabedSortingLayer = "Weapon";
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject mesh;
-
+    [SerializeField] private LayerMask whatIsGround;
 
     private Transform holdTransform = null;
+    [HideInInspector] public int rebond = 0;
     [HideInInspector] public Rigidbody rb = null;
     [SerializeField] private Collider ballCollider = null;
     [SerializeField] private Collider ballTrigger = null;
     private MeshRenderer meshRenderer = null;
     private Transform defaultParent = null;
+    
 
     bool isGrabed = false;
+    bool hasBeenGrounded = true;
    
     void Start()
     {
@@ -30,6 +33,7 @@ public class Grabable : MonoBehaviour
 
     public void Update()
     {
+        hasBeenGrounded = (hasBeenGrounded || (rb.velocity.y <= 0 && Physics.SphereCast(transform.position, 0.45f, Vector3.down, out RaycastHit _rayCast, 0.1f, whatIsGround)));
         animator.SetBool("Balled", !isGrabed);
        
         if (isGrabed)
@@ -58,6 +62,8 @@ public class Grabable : MonoBehaviour
 
     public void Trow(Vector3 _velocity)
     {
+        rebond = 0;
+        hasBeenGrounded = false;
         ballCollider.enabled = true;
         ballTrigger.enabled = true;
 
@@ -68,5 +74,14 @@ public class Grabable : MonoBehaviour
         transform.SetParent(defaultParent);
         rb.AddForce(_velocity,ForceMode.VelocityChange);
         isGrabed = false;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (!hasBeenGrounded)
+        {
+            rebond++;
+            Meter.Instance.AddNewMeterText("Rebond x"+ rebond.ToString(), 5 * rebond);
+        }
     }
 }

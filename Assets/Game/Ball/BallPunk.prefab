@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 8057232055437394837}
   - component: {fileID: 1217334783068282964}
   m_Layer: 0
-  m_Name: Ball
+  m_Name: BallPunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -308,6 +308,9 @@ MonoBehaviour:
   grabedSortingLayer: Weapon
   animator: {fileID: 8824655735388418953}
   mesh: {fileID: 5885750959552185752}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
   rb: {fileID: 0}
   ballCollider: {fileID: 3974308081569528894}
   ballTrigger: {fileID: 4189610714825766854}
@@ -432,7 +435,7 @@ PrefabInstance:
     - target: {fileID: 8009987137999418058, guid: 6a2de812372ee3a40a5d539def175887,
         type: 3}
       propertyPath: m_Name
-      value: Model
+      value: PunkModel
       objectReference: {fileID: 0}
     - target: {fileID: 8510132731797305157, guid: 6a2de812372ee3a40a5d539def175887,
         type: 3}
