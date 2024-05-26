@@ -17,7 +17,7 @@ public class MovingPlateform : MonoBehaviour
         timer = cycleSpeed;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         Vector3 vect = Axes * Ratio;
 
@@ -54,6 +54,7 @@ public class MovingPlateform : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         Riders.Remove(collision.gameObject);
+        collision.gameObject.transform.SetParent(null);
     }
 
     private void Move(Vector3 vect)

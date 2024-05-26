@@ -921,7 +921,8 @@ MonoBehaviour:
   levelTimer: 45
   currentCompletedGoals: 0
   gameOver: 0
-  currentLoadedLevel: {fileID: 0}
+  currentLoadedLevel: {fileID: 6925872679677439121, guid: feac2aaaf9a5eba4db87cb97d5b42582,
+    type: 3}
   levelToInstanciate:
   - {fileID: 9173161788198925382, guid: feac2aaaf9a5eba4db87cb97d5b42582, type: 3}
 --- !u!114 &762756093
