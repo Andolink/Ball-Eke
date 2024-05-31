@@ -8,7 +8,6 @@ public class WorldToScreenPoint : MonoBehaviour
     [SerializeField] private Transform orientation = null;
     [SerializeField] private Transform lookAt = null;
 
-
     [SerializeField] private float sensibilityX = 1;
     [SerializeField] private float sensibilityY = 1;
 
@@ -40,5 +39,11 @@ public class WorldToScreenPoint : MonoBehaviour
         lookAt.transform.rotation = transform.rotation;
 
         transform.position = orientation.position;
+    }
+
+    public void SetSensibility(float value)
+    {
+        sensibilityX = value;
+        sensibilityY = value;
     }
 }

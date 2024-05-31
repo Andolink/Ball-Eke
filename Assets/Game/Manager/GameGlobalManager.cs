@@ -152,4 +152,14 @@ public class GameGlobalManager : MonoBehaviour
 
         }
     }
+
+    //-------------------------------Options----------------------------//
+    public void OpenOptions()
+    {
+        UIMainMenu.transform.Find("Options").gameObject.SetActive(true);
+    }
+    public void CloseOptions()
+    {
+        UIMainMenu.transform.Find("Options").gameObject.SetActive(false);
+    }
 }
