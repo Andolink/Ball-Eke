@@ -18,6 +18,8 @@ public class Ending : MonoBehaviour
         {
             if (ball.transform.position.y <= transform.position.y && !isCompleted)
             {
+                ball.Take(transform, true);
+
                 LevelManager.Instance.gameOver = false;
                 LevelManager.Instance.currentCompletedGoals++;
 
@@ -30,12 +32,11 @@ public class Ending : MonoBehaviour
                 else
                 { Meter.Instance.AddNewMeterText("Ball-Eke!", 100); }
                 isCompleted = true;
-
             }
             else
             {
                 Vector3 _attraction = ((transform.position+Vector3.down) - ball.transform.position).normalized * 4f;
-                ball.rb.velocity = Vector3.Lerp(ball.rb.velocity, _attraction, Time.deltaTime * 2.5f);
+                ball.rb.velocity = Vector3.Lerp(ball.rb.velocity, _attraction, Time.deltaTime * 10f);
             }
         }
     }
