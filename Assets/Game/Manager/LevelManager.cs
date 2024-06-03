@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+
+    static public int LevelNumber = 0;
+    private float MinTimer = 20.0f;
     static public LevelManager Instance { get; private set; }
 
     [SerializeField] private TextMeshProUGUI textTimer;
@@ -70,6 +73,7 @@ public class LevelManager : MonoBehaviour
         player.ResetVar();
         player.transform.position = currentLoadedLevel.playerSpawn.position;
         levelTimer = currentLoadedLevel.timer;
+        levelTimer = Mathf.Max(LevelNumber * 10, MinTimer);
     }
 
     public void LevelStart()
@@ -115,6 +119,10 @@ public class LevelManager : MonoBehaviour
                 case 8: _text = "AN ENDLESS SPIRAL OF WASTED TIME."; break;
                 case 9: _text = "SO SKILLS? NAH TOO MUCH TO ASK 4."; break;
             }
+        }
+        else
+        {
+            LevelNumber += 1;
         }
 
         gameOver = false;
