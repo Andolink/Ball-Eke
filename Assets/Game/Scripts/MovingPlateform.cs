@@ -3,11 +3,20 @@ using UnityEngine;
 
 public class MovingPlateform : MonoBehaviour
 {
+    public bool Up;
+    public bool Forward;
+
+    public Vector3 AxeToVector3()
+    {
+        return new Vector3(Forward ? Force : 0f, Up ? Force : 0f, 0f);
+    }
+
     public float Ratio = 1;
-    public Vector3 Axes;
     public bool cyclicle = true;
     public float cycleSpeed = 1;
 
+    private Vector3 Axes;
+    private readonly float Force = 0.005f;
     private bool goingForward = true;
     private float timer;
     private List<GameObject> Riders = new();
@@ -15,6 +24,7 @@ public class MovingPlateform : MonoBehaviour
     private void Start()
     {
         timer = cycleSpeed;
+        Axes = AxeToVector3();
     }
 
     void FixedUpdate()
