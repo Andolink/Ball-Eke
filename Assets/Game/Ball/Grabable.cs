@@ -19,7 +19,8 @@ public class Grabable : MonoBehaviour
 
     bool isGrabed = false;
     bool hasBeenGrounded = true;
-   
+    bool isEnding = false;
+
     void Start()
     {
         defaultPosition = transform.position;
@@ -35,18 +36,28 @@ public class Grabable : MonoBehaviour
        
         if (isGrabed)
         {
-            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(new(0f, 270f, 0f)),10f * Time.deltaTime);
+            if (isEnding)
+            {
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(new(0f, 0f, 0f)), 10f * Time.deltaTime);
+            }
+            else 
+            {
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(new(0f, 270f, 0f)), 10f * Time.deltaTime);
+            }
+           
         }
     }
 
-    public void Take(Transform _holder)
+    public void Take(Transform _holder, bool _ending = false)
     {
+        if (isGrabed) return;
+
         ballCollider.enabled = false;
         ballTrigger.enabled = false;
 
         rb.isKinematic = true;
-        gameObject.layer = LayerMask.NameToLayer(grabedSortingLayer);
-        mesh.layer = gameObject.layer;
+        if (!_ending) gameObject.layer = LayerMask.NameToLayer(grabedSortingLayer);
+        if (!_ending) mesh.layer = gameObject.layer;
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;

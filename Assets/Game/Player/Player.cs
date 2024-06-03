@@ -127,12 +127,24 @@ public class Player : MonoBehaviour
     {
         Vector2 _moveInput = moveAction.action.ReadValue<Vector2>();
         Vector3 _moveDirectionOld = moveDirection;
-        moveDirection = orientation.forward * _moveInput.y + orientation.right * _moveInput.x;
+        Vector3 _curDir = moveDirection - Vector3.up * moveDirection.y;
+        Vector3 _newDir = orientation.forward * _moveInput.y + orientation.right * _moveInput.x;
         
-        isMoving = (moveDirection != Vector3.zero);
-       
+        float _dirChangeSpeed = 1f;
+        
+        if (!grounded)
+        { _dirChangeSpeed = .15f; }
+
+        isMoving = (_newDir != Vector3.zero);
+
+        playerMovementControls = Mathf.Lerp(playerMovementControls, 1f, 6f * Time.deltaTime);
+
         if (!isMoving)
         { moveDirection = _moveDirectionOld; }
+        else
+        {
+            moveDirection = Vector3.Lerp(_curDir, _newDir, 30f * _dirChangeSpeed * playerMovementControls * Time.deltaTime);
+        }
     }
 
 // THINGS
@@ -190,10 +202,8 @@ public class Player : MonoBehaviour
             }
         }
 
-        playerMovementControls = Mathf.Lerp(playerMovementControls,1f,6f * Time.deltaTime);
-
-        Vector3 _newAimedVelocity = moveDirection.normalized * speedLimit + Vector3.up * _yVelo;
-        rb.velocity = Vector3.Lerp(rb.velocity, _newAimedVelocity, 15f * playerMovementControls * Time.deltaTime);
+        Vector3 _newAimedVelocity = moveDirection * speedLimit + Vector3.up * _yVelo;
+        rb.velocity = Vector3.Lerp(rb.velocity, _newAimedVelocity, 15f * Time.deltaTime);
         
         dashVelocityLossTime -= Time.deltaTime;
         if (dashVelocityLossTime > 0f)
@@ -215,7 +225,7 @@ public class Player : MonoBehaviour
     {
         rb.velocity = _velocity;
         speedLimit = _velocity.magnitude;
-        moveDirection = _velocity;
+        moveDirection = _velocity.normalized;
     }
     public void StopMovedInside()
     {
@@ -238,15 +248,17 @@ public class Player : MonoBehaviour
             jumpBuffer = 0.05f;
         }
 
-        /* if (jumpAction.action.WasReleasedThisFrame() && isJumping)
-         {
-
+        if (jumpAction.action.ReadValue<float>() == 0 && isJumping)
+        {
              if (isJumping && rb.velocity.y > 0)
              {
-                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                rb.velocity = Vector3.Lerp(rb.velocity, new Vector3(rb.velocity.x, -1, rb.velocity.z), 4f * Time.deltaTime);
+                if (rb.velocity.y <= 0)
+                {
+                    isJumping = false;
+                }
              }
-        isJumping = false;
-        }*/
+        }
 
         if (jumpBuffer > 0)
         {
@@ -258,7 +270,7 @@ public class Player : MonoBehaviour
                 float _jumpVelocity = jumpForce + (rb.velocity.magnitude * 0.1f);
 
                 rb.velocity = new Vector3(rb.velocity.x, _jumpVelocity, rb.velocity.z);
-                moveDirection = rb.velocity;
+                moveDirection = rb.velocity.normalized;
                 gravityFactor = 0f;
 
 
@@ -283,7 +295,7 @@ public class Player : MonoBehaviour
 
                 ResetMovement(nearWall.normal * rb.velocity.magnitude);
                 rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
-                moveDirection = rb.velocity;
+                moveDirection = rb.velocity.normalized;
 
                 jumpBuffer = 0;
                 coyoteTime = 0;
@@ -322,7 +334,7 @@ public class Player : MonoBehaviour
 
             Vector3 _dir = lookAt.forward;
             rb.velocity = _dir * _velocityMagnitude;
-            moveDirection = rb.velocity;
+            moveDirection = rb.velocity.normalized;
             dashVelocityLossTime = 1f;
             gravityFactor = 0f;
             playerMovementControls = 0f;
