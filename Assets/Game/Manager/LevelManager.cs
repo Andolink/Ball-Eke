@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -14,7 +13,8 @@ public class LevelManager : MonoBehaviour
 
     public int currentCompletedGoals = 0;
     private bool levelEnd = false;
-    [HideInInspector] public bool gameOver = false; 
+    [HideInInspector] public bool gameOver = false;
+    [HideInInspector] public float currentLevelScore = 0;
 
     [SerializeField] private Level currentLoadedLevel;
     [SerializeField] List<GameObject> levelToInstanciate = new List<GameObject>();
@@ -32,7 +32,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!levelEnd)
+        if (!levelEnd && GameGlobalManager.Instance.currentState == GameGlobalManager.GameStates.Gameplay)
         {
             LevelTimerUpdate();
             
@@ -75,6 +75,7 @@ public class LevelManager : MonoBehaviour
     public void LevelStart()
     {
         currentCompletedGoals = 0;
+        currentLevelScore = 0;
         levelEnd = false;
         TimeManager.Instance.SetTimePause(false);
         player.transform.position = currentLoadedLevel.playerSpawn.position;

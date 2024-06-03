@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DeathZone : MonoBehaviour
@@ -26,9 +24,8 @@ public class DeathZone : MonoBehaviour
 
         if (_collider.TryGetComponent(out Grabable _grab))
         {
-            LevelManager.Instance.currentCompletedGoals++;
-            Meter.Instance.AddNewMeterText("Skill Issue", 1);
-            Destroy(_grab);
+            Meter.Instance.AddNewMeterText("Skill Issue", 0);
+            _grab.Death();
         }
     }
 }

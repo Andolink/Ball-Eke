@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5330004592621542542}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2979304709473802534}
   - component: {fileID: 999830831854937052}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 4189610714825766854}
   - component: {fileID: 8057232055437394837}
   - component: {fileID: 1217334783068282964}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BallPunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,13 +304,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ffe4706f8261264ea2fef89bc6fbe4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSortingLayer: Ground
+  defaultSortingLayer: Ball
   grabedSortingLayer: Weapon
   animator: {fileID: 8824655735388418953}
   mesh: {fileID: 5885750959552185752}
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
+  rebond: 0
   rb: {fileID: 0}
   ballCollider: {fileID: 3974308081569528894}
   ballTrigger: {fileID: 4189610714825766854}
@@ -322,6 +323,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5330004592621542542}
     m_Modifications:
+    - target: {fileID: -9087929549874192951, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6a2de812372ee3a40a5d539def175887,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -387,10 +393,100 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8612975521420386101, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -6804224529849698862, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -6771956594820943956, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -5506977543257564031, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -5314264407040801482, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -4241276183704266456, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -2739453024485197691, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -2649964431914590891, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -384284768938857105, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6a2de812372ee3a40a5d539def175887,
         type: 3}
       propertyPath: m_Name
       value: Punk
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1160272932807521224, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1192817599518968238, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1790183945725220954, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944362705653258875, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948852056694245014, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819001077394492298, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415388599835504622, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6817880337345872858, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6830945432629781959, guid: 6a2de812372ee3a40a5d539def175887,
         type: 3}
@@ -432,10 +528,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6905609870639353253, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7036213049465896255, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7350607861734169024, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8009987137999418058, guid: 6a2de812372ee3a40a5d539def175887,
         type: 3}
       propertyPath: m_Name
       value: PunkModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8009987137999418058, guid: 6a2de812372ee3a40a5d539def175887,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8510132731797305157, guid: 6a2de812372ee3a40a5d539def175887,
         type: 3}

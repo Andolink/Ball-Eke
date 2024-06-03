@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Meter : MonoBehaviour
@@ -57,6 +55,8 @@ public class Meter : MonoBehaviour
         _meterText.text = _text;
         _meterText.score = _score;
         _meterText.transform.position = Vector3.zero;
+
+        LevelManager.Instance.currentLevelScore += _score;
 
         meterTexts.Insert(0, _meterText);
     }
