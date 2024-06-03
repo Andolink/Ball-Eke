@@ -70,6 +70,6 @@ public class MovingPlateform : MonoBehaviour
     private void Move(Vector3 vect)
     {
         // Déplacer plateforme
-        transform.position += vect;
+        transform.position += vect * Time.deltaTime;
     }
 }
