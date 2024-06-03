@@ -10,9 +10,6 @@ public class WorldToScreenPoint : MonoBehaviour
     [SerializeField] private float sensibilityY = 1;
 
     Vector3 rotation = Vector3.zero;
-
-   
-
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
