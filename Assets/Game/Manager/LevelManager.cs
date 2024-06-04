@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+
+    static public int LevelNumber = 0;
     static public LevelManager Instance { get; private set; }
 
     [SerializeField] private TextMeshProUGUI textTimer;
     [SerializeField] private Player player;
 
-    [SerializeField] public float levelTimer = 45f;
+    [SerializeField] private float levelTimer = 45f;
+    [SerializeField] private float minLevelTimer = 15.0f;
+    private float deltaTimer = 5.0f;
 
     public int currentCompletedGoals = 0;
     private bool levelEnd = false;
@@ -70,6 +74,9 @@ public class LevelManager : MonoBehaviour
         player.ResetVar();
         player.transform.position = currentLoadedLevel.playerSpawn.position;
         levelTimer = currentLoadedLevel.timer;
+        
+        // Difficulty
+        levelTimer = Mathf.Max(levelTimer - LevelNumber * deltaTimer, MinTimer);
     }
 
     public void LevelStart()
@@ -115,6 +122,10 @@ public class LevelManager : MonoBehaviour
                 case 8: _text = "AN ENDLESS SPIRAL OF WASTED TIME."; break;
                 case 9: _text = "SO SKILLS? NAH TOO MUCH TO ASK 4."; break;
             }
+        }
+        else
+        {
+            LevelNumber += 1;
         }
 
         gameOver = false;
