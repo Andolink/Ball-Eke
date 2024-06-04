@@ -733,6 +733,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 087101043339f5443be8f48d5745a134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPause: 0
+  MainMenu: {fileID: 1029194528}
 --- !u!1 &408011811
 GameObject:
   m_ObjectHideFlags: 0
@@ -1552,6 +1554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 792ce1ca14eb4e3429ffa9e20488b125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pause: {fileID: 360649490}
 --- !u!4 &762756091
 Transform:
   m_ObjectHideFlags: 0
