@@ -74,9 +74,13 @@ public class LevelManager : MonoBehaviour
         player.ResetVar();
         player.transform.position = currentLoadedLevel.playerSpawn.position;
         levelTimer = currentLoadedLevel.timer;
-        
-        // Difficulty
-        levelTimer = Mathf.Max(levelTimer - LevelNumber * deltaTimer, MinTimer);
+
+        currentLoadedLevel.ResetBallSpawn();
+        foreach (Grabable ball in currentLoadedLevel.balls)
+        {
+            ball.defaultPosition = currentLoadedLevel.RandomEmptyBallSpawn();
+            ball.Respawn();
+        }
     }
 
     public void LevelStart()
