@@ -322,6 +322,8 @@ public class Player : MonoBehaviour
     {
         if (dashAction.action.WasPressedThisFrame())
         {
+            //SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxDash);
+            LevelManager.Instance.CameraShake();
             TimeManager.Instance.TimeStop(0.05f);
             float _velocityMagnitude = rb.velocity.magnitude + 2f;
             if (_velocityMagnitude < dashSpeed)

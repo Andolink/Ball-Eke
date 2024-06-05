@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Generic; 
 using UnityEngine;
 
 public class GameGlobalManager : MonoBehaviour
@@ -45,6 +45,7 @@ public class GameGlobalManager : MonoBehaviour
 
     public void GoToPlayMode()
     {
+        Debug.Log("Mom");
         StartTransition();
         nextState = GameStates.Gameplay;
     }

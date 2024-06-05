@@ -19,8 +19,6 @@ public class Pause : MonoBehaviour
             else
                 Cursor.lockState = CursorLockMode.Locked;
         }
-
-        Time.timeScale = isPause ? 0 : 1; 
     }
 
     public void ClosePause()

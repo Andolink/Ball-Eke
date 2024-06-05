@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI textTimer;
     [SerializeField] private Player player;
+    [SerializeField] private GameCamera gameCamera;
 
     [SerializeField] private float levelTimer = 45f;
     [SerializeField] private float minLevelTimer = 15.0f;
@@ -138,4 +139,10 @@ public class LevelManager : MonoBehaviour
         levelEnd = true;
         GameGlobalManager.Instance.StartTransition();
     }
+
+    public void CameraShake(float _magnitude = 0.1f, float _loss = 5f, float _time = 0.1f)
+    {
+        gameCamera.Shake(_magnitude, _loss, _time);
+    }
+
 }

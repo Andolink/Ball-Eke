@@ -7,7 +7,7 @@ public class SetParams : MonoBehaviour
 {
     [SerializeField] UnityEngine.UI.Slider sliderVolume;
     [SerializeField] UnityEngine.UI.Slider sliderSensi;
-    [SerializeField] WorldToScreenPoint goCamera;
+    [SerializeField] GameCamera goCamera;
 
     private void Start()
     {

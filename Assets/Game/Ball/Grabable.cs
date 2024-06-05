@@ -38,7 +38,7 @@ public class Grabable : MonoBehaviour
         {
             if (isEnding)
             {
-                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(new(0f, 0f, 0f)), 10f * Time.deltaTime);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(new(0f, 180f, 0f)), 10f * Time.deltaTime);
             }
             else 
             {
