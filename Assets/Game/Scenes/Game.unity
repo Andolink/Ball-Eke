@@ -920,12 +920,13 @@ MonoBehaviour:
   textTimer: {fileID: 1901654742}
   player: {fileID: 697698513}
   levelTimer: 45
+  minLevelTimer: 15
   currentCompletedGoals: 0
   gameOver: 0
   currentLevelScore: 0
   currentLoadedLevel: {fileID: 0}
   levelToInstanciate:
-  - {fileID: 6411703315704271477, guid: feac2aaaf9a5eba4db87cb97d5b42582, type: 3}
+  - {fileID: 4909467976132775056, guid: feac2aaaf9a5eba4db87cb97d5b42582, type: 3}
 --- !u!114 &762756093
 MonoBehaviour:
   m_ObjectHideFlags: 0
