@@ -925,7 +925,7 @@ MonoBehaviour:
   currentLevelScore: 0
   currentLoadedLevel: {fileID: 0}
   levelToInstanciate:
-  - {fileID: 9173161788198925382, guid: feac2aaaf9a5eba4db87cb97d5b42582, type: 3}
+  - {fileID: 6411703315704271477, guid: feac2aaaf9a5eba4db87cb97d5b42582, type: 3}
 --- !u!114 &762756093
 MonoBehaviour:
   m_ObjectHideFlags: 0
