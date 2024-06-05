@@ -3,73 +3,63 @@ using UnityEngine;
 
 public class MovingPlateform : MonoBehaviour
 {
-    public bool Up;
-    public bool Forward;
+    [SerializeField] private MovingPath path;
 
-    public Vector3 AxeToVector3()
-    {
-        return new Vector3(Forward ? Force : 0f, Up ? Force : 0f, 0f);
-    }
+    [SerializeField] private float speed = 1.0f;
 
-    public float Ratio = 1;
-    public bool cyclicle = true;
-    public float cycleSpeed = 1;
+    private int pathIndex;
 
-    private Vector3 Axes;
-    private readonly float Force = 0.005f;
-    private bool goingForward = true;
+    private Transform nextPath;
+    private Transform prevPath;
+
+    private float travelTime;
     private float timer;
+
     private List<GameObject> Riders = new();
 
     private void Start()
     {
-        timer = cycleSpeed;
-        Axes = AxeToVector3();
+        GotoNextPath();
+    }
+
+    private void GotoNextPath()
+    {
+        prevPath = path.GetPath(pathIndex);
+        pathIndex = path.GetNextIndex(pathIndex);
+        nextPath = path.GetPath(pathIndex);
+        timer = 0;
+
+        float distToTravel = Vector3.Distance(prevPath.position, nextPath.position);
+        travelTime = distToTravel / speed;
     }
 
     void FixedUpdate()
     {
-        Vector3 vect = Axes * Ratio;
+        timer += Time.deltaTime;
 
-        // Cyclicle
-        if (cyclicle)
-        {
-            // Timer Cycle
-            timer -= Time.deltaTime;
-            if (timer < 0)
-            {
-                goingForward = !goingForward;
-                timer = cycleSpeed;
-            } //
-
-            // gestion State Cycle
-            if (goingForward)
-                Move(vect);
-            else
-                Move(-vect); //
-
-            return;
-        }
-
-        // Not Cyclicle
-        Move(vect);
+        Move();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collider)
     {
-        Riders.Add(collision.gameObject);
-        collision.gameObject.transform.SetParent(transform);
+        Riders.Add(collider.gameObject);
+        collider.gameObject.transform.SetParent(transform);
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider collider)
     {
-        Riders.Remove(collision.gameObject);
-        collision.gameObject.transform.SetParent(null);
+        Riders.Remove(collider.gameObject);
+        collider.gameObject.transform.SetParent(null);
     }
 
-    private void Move(Vector3 vect)
+    private void Move()
     {
-        // Déplacer plateforme
-        transform.position += vect * Time.deltaTime;
+        float timerPercentage = timer / travelTime;
+        timerPercentage = Mathf.SmoothStep(0, 1, timerPercentage);
+        transform.position = Vector3.Lerp(prevPath.position, nextPath.position, timerPercentage);
+        transform.rotation = Quaternion.Lerp(prevPath.rotation, nextPath.rotation, timerPercentage);
+
+        if (timerPercentage >= 1)
+            GotoNextPath();
     }
 }
