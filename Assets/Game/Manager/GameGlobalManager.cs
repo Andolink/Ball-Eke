@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Generic; 
 using UnityEngine;
 
 public class GameGlobalManager : MonoBehaviour
@@ -45,6 +45,7 @@ public class GameGlobalManager : MonoBehaviour
 
     public void GoToPlayMode()
     {
+        Debug.Log("Mom");
         StartTransition();
         nextState = GameStates.Gameplay;
     }
@@ -150,5 +151,15 @@ public class GameGlobalManager : MonoBehaviour
             }
 
         }
+    }
+
+    //-------------------------------Options----------------------------//
+    public void OpenOptions()
+    {
+        UIMainMenu.transform.Find("Options").gameObject.SetActive(true);
+    }
+    public void CloseOptions()
+    {
+        UIMainMenu.transform.Find("Options").gameObject.SetActive(false);
     }
 }

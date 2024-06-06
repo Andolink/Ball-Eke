@@ -15,7 +15,7 @@ public class Grabable : MonoBehaviour
     [SerializeField] private Collider ballTrigger = null;
     private MeshRenderer meshRenderer = null;
     private Transform defaultParent = null;
-    private Vector3 defaultPosition;
+    public Vector3 defaultPosition;
 
     bool isGrabed = false;
     bool hasBeenGrounded = true;
@@ -38,7 +38,7 @@ public class Grabable : MonoBehaviour
         {
             if (isEnding)
             {
-                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(new(0f, 0f, 0f)), 10f * Time.deltaTime);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(new(0f, 180f, 0f)), 10f * Time.deltaTime);
             }
             else 
             {
@@ -86,9 +86,17 @@ public class Grabable : MonoBehaviour
 
     public void Death()
     {
+        Respawn();
+    }
+
+    public void Respawn()
+    {
         transform.position = defaultPosition;
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        if (rb)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     public void OnCollisionEnter(Collision collision)

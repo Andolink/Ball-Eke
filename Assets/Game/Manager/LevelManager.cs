@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+
+    static public int LevelNumber = 0;
     static public LevelManager Instance { get; private set; }
 
     [SerializeField] private TextMeshProUGUI textTimer;
     [SerializeField] private Player player;
+    [SerializeField] private GameCamera gameCamera;
 
-    [SerializeField] public float levelTimer = 45f;
+    [SerializeField] private float levelTimer = 45f;
+    [SerializeField] private float minLevelTimer = 15.0f;
+    private float deltaTimer = 5.0f;
 
     public int currentCompletedGoals = 0;
     private bool levelEnd = false;
@@ -70,6 +75,13 @@ public class LevelManager : MonoBehaviour
         player.ResetVar();
         player.transform.position = currentLoadedLevel.playerSpawn.position;
         levelTimer = currentLoadedLevel.timer;
+
+        currentLoadedLevel.ResetBallSpawn();
+        foreach (Grabable ball in currentLoadedLevel.balls)
+        {
+            ball.defaultPosition = currentLoadedLevel.RandomEmptyBallSpawn();
+            ball.Respawn();
+        }
     }
 
     public void LevelStart()
@@ -116,6 +128,10 @@ public class LevelManager : MonoBehaviour
                 case 9: _text = "SO SKILLS? NAH TOO MUCH TO ASK 4."; break;
             }
         }
+        else
+        {
+            LevelNumber += 1;
+        }
 
         gameOver = false;
         textTimer.text = _text; 
@@ -123,4 +139,10 @@ public class LevelManager : MonoBehaviour
         levelEnd = true;
         GameGlobalManager.Instance.StartTransition();
     }
+
+    public void CameraShake(float _magnitude = 0.1f, float _loss = 5f, float _time = 0.1f)
+    {
+        gameCamera.Shake(_magnitude, _loss, _time);
+    }
+
 }

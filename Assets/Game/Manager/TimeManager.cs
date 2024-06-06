@@ -11,6 +11,8 @@ public class TimeManager : MonoBehaviour
     private float targetTimeScale = 1f;
     private float factorTimeScale = 1f;
 
+    [SerializeField] Pause pause;
+
     private void OnEnable()
     {
         Instance = this;
@@ -27,11 +29,16 @@ public class TimeManager : MonoBehaviour
         {
             timeStop -= Time.unscaledDeltaTime;
             Time.timeScale = 0;
+            Debug.Log("tatmere");
         }
         else
         {
             timeScale = Mathf.Lerp(timeScale, targetTimeScale, factorTimeScale * 10f * Time.unscaledDeltaTime);
-            Time.timeScale = timeScale * pauseMult;
+
+            if (pause.isPause)
+            { Time.timeScale = 0f; }
+            else
+            { Time.timeScale = timeScale * pauseMult; }
         }
     }
 
