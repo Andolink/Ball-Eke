@@ -1597,6 +1597,8 @@ MonoBehaviour:
   currentLoadedLevel: {fileID: 0}
   levelToInstanciate:
   - {fileID: 4909467976132775056, guid: feac2aaaf9a5eba4db87cb97d5b42582, type: 3}
+  - {fileID: 6096447994739633604, guid: a3ca97a06423b0e488d6f74e9f004482, type: 3}
+  - {fileID: 6096447994739633604, guid: 9e29bc8a4e8436a4b8322ab83353ed53, type: 3}
 --- !u!114 &762756093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1636,6 +1638,7 @@ MonoBehaviour:
   sfxAirHorn: {fileID: 8300000, guid: 1849feca9f82da4429e75af2684bbe92, type: 3}
   sfxBass: {fileID: 8300000, guid: 6146fc72340146d44893fd67d928b87b, type: 3}
   sfxChadMove: {fileID: 8300000, guid: b06677dda9ccc164b94aad8ea1103d86, type: 3}
+  sfxDash: {fileID: 0}
   sfxDjScratch: {fileID: 8300000, guid: 0b167a5569f191f4ab957e1712c990e6, type: 3}
   sfxLoading: {fileID: 8300000, guid: 5097a61fabe85b848a34793dea28a064, type: 3}
   sfxScore: {fileID: 8300000, guid: 62396959e02d0344ca7b9f851439f9ad, type: 3}
