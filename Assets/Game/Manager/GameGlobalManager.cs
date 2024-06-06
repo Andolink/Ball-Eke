@@ -1,4 +1,4 @@
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameGlobalManager : MonoBehaviour
@@ -62,7 +62,11 @@ public class GameGlobalManager : MonoBehaviour
 
     public void InitializeMode()
     {
-        currentState = nextState;
+        if (iconTrasition)
+        {
+            iconTrasition = false;
+            currentState = nextState;
+        }
 
         switch (currentState)
         {
@@ -129,7 +133,6 @@ public class GameGlobalManager : MonoBehaviour
                     if (iconTransitionEndTimer >= 1)
                     {
                         iconTransitionEndTimer = 0;
-                        iconTrasition = false;
 
                         InitializeMode();
                     }
