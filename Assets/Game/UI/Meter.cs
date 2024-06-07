@@ -60,4 +60,13 @@ public class Meter : MonoBehaviour
 
         meterTexts.Insert(0, _meterText);
     }
+
+    public void ClearMeter()
+    {
+        for (int _i = 0; _i < meterTexts.Count; _i++)
+        {
+            Destroy(meterTexts[_i].gameObject);
+            meterTexts.RemoveAt(_i);
+        }
+    }
 }

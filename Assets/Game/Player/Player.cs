@@ -204,7 +204,7 @@ public class Player : MonoBehaviour
 
         Vector3 _newAimedVelocity = moveDirection * speedLimit + Vector3.up * _yVelo;
         rb.velocity = Vector3.Lerp(rb.velocity, _newAimedVelocity, 15f * Time.deltaTime);
-        
+
         dashVelocityLossTime -= Time.deltaTime;
         if (dashVelocityLossTime > 0f)
         {
@@ -214,7 +214,7 @@ public class Player : MonoBehaviour
 
         float _mult = 30f;
         float _val = Mathf.Clamp01(rb.velocity.magnitude - 4f);
-        if (dashVelocityLossTime > 0 || isSlaming)
+        if ((dashVelocityLossTime > 0 || isSlaming) && !grounded)
         {
             _mult = 50f;
         }
@@ -285,8 +285,11 @@ public class Player : MonoBehaviour
                 if (dashVelocityLossTime > 0)
                 {
                     Meter.Instance.AddNewMeterText("Wave Dash", (int)rb.velocity.magnitude);
+                    SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxChadMove);
                     dashVelocityLossTime = 0f;
                 }
+
+                SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxBass);
             }
             else if (nearWallFound)
             {
@@ -304,6 +307,7 @@ public class Player : MonoBehaviour
                 playerMovementControls = 0f;
                 gravityFactor = 0f;
 
+                SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxBass);
             }
         }
     }
@@ -322,7 +326,7 @@ public class Player : MonoBehaviour
     {
         if (dashAction.action.WasPressedThisFrame())
         {
-            //SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxDash);
+            SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxDash);
             LevelManager.Instance.CameraShake();
             TimeManager.Instance.TimeStop(0.05f);
             float _velocityMagnitude = rb.velocity.magnitude + 2f;

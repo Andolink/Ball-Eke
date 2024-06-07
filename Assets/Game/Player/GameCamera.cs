@@ -14,12 +14,6 @@ public class GameCamera : MonoBehaviour
     private float shakeLoss = 1f;
 
     Vector3 rotation = Vector3.zero;
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -38,7 +32,7 @@ public class GameCamera : MonoBehaviour
         transform.position = orientation.position;
         ShakeUpdate();
     }
-
+   
     private void ShakeUpdate()
     {
         shakeMagnitude = Mathf.Lerp(shakeMagnitude, 0f, 15f * shakeLoss);

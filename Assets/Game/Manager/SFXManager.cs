@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SFXManager : MonoBehaviour
 {
+    public static SFXManager Instance { get; private set; }
+
     [SerializeField] private GameObject soundEffect;
 
     public AudioClip sfxAirHorn;
@@ -15,17 +17,31 @@ public class SFXManager : MonoBehaviour
     public AudioClip sfxScore;
     public AudioClip sfxSkillIssue;
 
-    public static SFXManager Instance { get; private set; }
-
+ 
     private void OnEnable()
     {
         Instance = this;
     }
 
-    public void SfxPlay(AudioClip _audipClip)
+    public void SfxPlay(AudioClip _audipClip, bool _addRandomPitch = true)
     {
-        GameObject _sfx = Instantiate(soundEffect);
-        _sfx.GetComponent<SoundEffect>().audioSource.clip = _audipClip;
+        if (_audipClip)
+        {
+            GameObject _sfx = Instantiate(soundEffect);
+            SoundEffect _soundEffect = _sfx.GetComponent<SoundEffect>();
+
+            _soundEffect.audioSource.clip = _audipClip;
+            _soundEffect.audioSource.Play();
+
+            if (_addRandomPitch)
+            {
+                _soundEffect.audioPitch = Random.Range(0.95f,1.05f);
+            }
+        }
+        else
+        {
+            Debug.Log("wtf ij   zgrhcpaoekq,dhkcmgaoe jimo");
+        }
     }
 
 }

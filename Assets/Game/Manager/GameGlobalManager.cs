@@ -72,6 +72,7 @@ public class GameGlobalManager : MonoBehaviour
                 UIGame.SetActive(false);
                 MainMenuRoot.SetActive(true);
                 PlayerPackage.SetActive(false);
+                LevelManager.Instance.LevelUnload();
 
                 break;
             case GameStates.Gameplay:
@@ -106,10 +107,16 @@ public class GameGlobalManager : MonoBehaviour
         }
     }
 
-    
+    public void ChangeCursorStat(bool _active)
+    {
+        Cursor.lockState = _active ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = _active;
+    }
+
     public void StartTransition()
     {
         iconTrasition = true;
+        SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxLoading);
     }
     private void IconTransition()
     {

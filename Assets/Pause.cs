@@ -13,11 +13,11 @@ public class Pause : MonoBehaviour
         {
             isPause = !isPause;
             transform.GetChild(0).gameObject.SetActive(isPause);
-            Cursor.visible = isPause;
+
             if (isPause)
-                Cursor.lockState = CursorLockMode.None;
-            else
-                Cursor.lockState = CursorLockMode.Locked;
+            {
+                GameGlobalManager.Instance.ChangeCursorStat(false);
+            }
         }
     }
 
@@ -26,7 +26,6 @@ public class Pause : MonoBehaviour
         isPause = false;
         transform.GetChild(0).gameObject.SetActive(isPause);
 
-        Cursor.visible = isPause;
-        Cursor.lockState = CursorLockMode.Locked;
+        GameGlobalManager.Instance.ChangeCursorStat(false);
     }
 }

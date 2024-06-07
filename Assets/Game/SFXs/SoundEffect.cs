@@ -5,6 +5,7 @@ using UnityEngine;
 public class SoundEffect : MonoBehaviour
 {
     [SerializeField] public AudioSource audioSource;
+    public float audioPitch = 1f;
 
     void Start()
     {
@@ -17,6 +18,10 @@ public class SoundEffect : MonoBehaviour
         if (!audioSource.isPlaying)
         {
             Destroy(gameObject);
+        }
+        else
+        {
+            audioSource.pitch = Time.timeScale * audioPitch;
         }
     }
 }
