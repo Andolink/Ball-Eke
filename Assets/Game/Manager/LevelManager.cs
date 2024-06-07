@@ -27,7 +27,7 @@ public class LevelManager : MonoBehaviour
     [HideInInspector] public bool gameOver = false;
     [HideInInspector] public float currentLevelScore = 0;
 
-    [SerializeField] private Level currentLoadedLevel;
+    [SerializeField] public Level currentLoadedLevel;
     [SerializeField] List<GameObject> levelToInstanciate = new List<GameObject>();
     
     private void OnEnable()
