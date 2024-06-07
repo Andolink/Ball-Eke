@@ -205,6 +205,7 @@ public class LevelManager : MonoBehaviour
      
     public void Quit()
     {
+
         finalResultScreen.SetActive(false);
         GameGlobalManager.Instance.GoToMainMenu();
         GameGlobalManager.Instance.StartTransition();

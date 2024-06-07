@@ -18,8 +18,8 @@ public class GameCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float _mouseX = Input.GetAxisRaw("Mouse X") * sensibilityX * Time.deltaTime;
-        float _mouseY = Input.GetAxisRaw("Mouse Y") * sensibilityY * Time.deltaTime;
+        float _mouseX = Input.GetAxisRaw("Mouse X") * sensibilityX * Time.unscaledDeltaTime;
+        float _mouseY = Input.GetAxisRaw("Mouse Y") * sensibilityY * Time.unscaledDeltaTime;
 
         rotation.y += _mouseX;
         rotation.x -= _mouseY;

@@ -34,6 +34,11 @@ public class Meter : MonoBehaviour
                 meterTexts.RemoveAt(_i);
                 _i--;
             }
+            else if (_i > 6)
+            {
+                Destroy(meterTexts[_i].gameObject);
+                meterTexts.RemoveAt(_i);
+            }
         }
     }
 
