@@ -120,7 +120,7 @@ public class GameGlobalManager : MonoBehaviour
     public void StartTransition()
     {
         iconTrasition = true;
-        SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxLoading);
+        SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxLoading,false,false);
     }
     private void IconTransition()
     {

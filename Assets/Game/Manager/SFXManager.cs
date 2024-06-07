@@ -16,8 +16,10 @@ public class SFXManager : MonoBehaviour
     public AudioClip sfxLoading;
     public AudioClip sfxScore;
     public AudioClip sfxSkillIssue;
+    public AudioClip sfxBong;
+    public AudioClip sfxGrab;
+    public AudioClip sfxTrow;
 
- 
     private void OnEnable()
     {
         Instance = this;

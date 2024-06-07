@@ -48,12 +48,12 @@ Material:
     m_Floats:
     - _Cull: 0
     - _Cutoff: 0.183
-    - _Max: 2
-    - _Min: 0
-    - _OutlineThickness: 0
+    - _Max: 3.17
+    - _Min: -0.2
+    - _OutlineThickness: 2.37
     - _QueueControl: 0
     - _ReceiveShadows: 0
-    - _Shades: 0.08
+    - _Shades: -0.1
     - _Smoothness: 0
     m_Colors:
     - _OutlineColor: {r: 0.3773585, g: 0, b: 0.34707627, a: 0}

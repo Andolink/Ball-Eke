@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-
     static public int LevelNumber = 0;
     static public int LvlIndex = 0;
     static public LevelManager Instance { get; private set; }
@@ -16,6 +15,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resultScore;
     [SerializeField] private TextMeshProUGUI resultSentence;
     [SerializeField] private Pause pause;
+    [SerializeField] private GameObject finalResultScreen;
+
 
     [SerializeField] private float levelTimer = 45f;
     [SerializeField] private float minLevelTimer = 15.0f;
@@ -26,6 +27,7 @@ public class LevelManager : MonoBehaviour
     public float score = 0;
     [HideInInspector] public bool gameOver = false;
     [HideInInspector] public float currentLevelScore = 0;
+    [HideInInspector] public float globalScore = 0;
 
     [SerializeField] private Level currentLoadedLevel;
     [SerializeField] List<GameObject> levelToInstanciate = new List<GameObject>();
@@ -153,8 +155,7 @@ public class LevelManager : MonoBehaviour
         
         if (gameOver)
         {
-            
-            switch ((int)Random.Range(0, 9))
+            switch ((int)Random.Range(0, 10))
             {
                 default :  _text += "A NIGHTMARE WORSE THAT CAPITALISM HAS COME!"; break;
                 case 0 : _text += "TOO BALLED..."; break;
@@ -171,6 +172,16 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            switch ((int)Random.Range(0, 5))
+            {
+                default: _text += "BALL-EKE!"; break;
+                case 0: _text += "EKE YEAH!"; break;
+                case 1: _text += "WP"; break;
+                case 2: _text += "YA GOT SOME BALLS"; break;
+                case 3: _text += "ADDICTING RIGHT?"; break;
+                case 4: _text += "LOL < YOU"; break;
+            }
+
             LvlIndex += 1;
         }
 
@@ -191,11 +202,18 @@ public class LevelManager : MonoBehaviour
     {
         GameGlobalManager.Instance.StartTransition();
     }
-
+     
     public void Quit()
     {
+        finalResultScreen.SetActive(false);
         GameGlobalManager.Instance.GoToMainMenu();
         GameGlobalManager.Instance.StartTransition();
+    }
+
+    public void ResultScreen()
+    {
+        resultScreen.SetActive(false);
+        finalResultScreen.SetActive(true);
     }
 
     public void CameraShake(float _magnitude = 0.1f, float _loss = 5f, float _time = 0.1f)

@@ -35,7 +35,7 @@ public class Meter : MonoBehaviour
                 _i--;
             }
         }
-     }
+    }
 
     public void UpdateMeterTextsPosition()
     {
@@ -57,12 +57,15 @@ public class Meter : MonoBehaviour
         _meterText.transform.position = Vector3.zero;
 
         LevelManager.Instance.currentLevelScore += _score;
+        LevelManager.Instance.globalScore += _score;
+
 
         meterTexts.Insert(0, _meterText);
     }
 
     public void ClearMeter()
     {
+        UpdateMeterList();
         for (int _i = 0; _i < meterTexts.Count; _i++)
         {
             Destroy(meterTexts[_i].gameObject);

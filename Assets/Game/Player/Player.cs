@@ -273,7 +273,6 @@ public class Player : MonoBehaviour
                 moveDirection = rb.velocity.normalized;
                 gravityFactor = 0f;
 
-
                 StopMovedInside();
 
                 jumpBuffer = 0;

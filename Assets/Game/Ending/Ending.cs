@@ -18,6 +18,7 @@ public class Ending : MonoBehaviour
         {
             if (ball.transform.position.y <= transform.position.y && !isCompleted)
             {
+                SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxScore);
                 ball.Take(transform, true);
 
                 LevelManager.Instance.gameOver = false;

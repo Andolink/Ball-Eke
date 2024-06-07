@@ -38,7 +38,7 @@ public class Grabable : MonoBehaviour
         {
             if (isEnding)
             {
-                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(new(0f, 180f, 0f)), 10f * Time.deltaTime);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(new(0f, 0f, 0f)), 10f * Time.deltaTime);
             }
             else 
             {
@@ -56,9 +56,11 @@ public class Grabable : MonoBehaviour
         ballTrigger.enabled = false;
 
         rb.isKinematic = true;
+
         if (!_ending) gameObject.layer = LayerMask.NameToLayer(grabedSortingLayer);
         if (!_ending) mesh.layer = gameObject.layer;
-
+        if (!_ending) SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxGrab);
+        
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         
@@ -66,10 +68,13 @@ public class Grabable : MonoBehaviour
         transform.SetParent(holdTransform, true);
         transform.localPosition = Vector3.zero;
         isGrabed = true;
+        isEnding = _ending;
     }
 
     public void Trow(Vector3 _velocity)
     {
+        SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxTrow);
+
         rebond = 0;
         hasBeenGrounded = false;
         ballCollider.enabled = true;
@@ -105,6 +110,7 @@ public class Grabable : MonoBehaviour
         {
             rebond++;
             Meter.Instance.AddNewMeterText("Rebond x"+ rebond.ToString(), 5 * rebond);
+            SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxBong);
         }
     }
 }
