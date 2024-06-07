@@ -19,14 +19,14 @@ public class DeathZone : MonoBehaviour
         if (_collider.TryGetComponent(out Player _player))
         {
             LevelManager.Instance.PlayerResetPosition();
-            Meter.Instance.AddNewMeterText("Big Skill Issue", 0);
+            Meter.Instance.AddNewMeterText("Big Skill Issue", -100);
             SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxSkillIssue);
 
         }
 
         if (_collider.TryGetComponent(out Grabable _grab))
         {
-            Meter.Instance.AddNewMeterText("Skill Issue", 0);
+            Meter.Instance.AddNewMeterText("Skill Issue", -25);
             SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxDjScratch);
             _grab.Death();
         }

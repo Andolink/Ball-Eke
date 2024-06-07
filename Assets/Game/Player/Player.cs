@@ -40,6 +40,14 @@ public class Player : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float dashSpeed;
+    [SerializeField] private RectTransform dashMeter;
+    [SerializeField] private RectTransform slowMoMeter;
+
+    private float slowMoVal = 1;
+    private float slowMoWait = 0;
+    private float dashVal = 1;
+
+
 
     [Header("Jumping")]
     [SerializeField] private float jumpForce;
@@ -48,6 +56,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float wallJumpSpeedFactor;
     [SerializeField] private float coyoteTime = 0f;
     [SerializeField] private float jumpBuffer = 0f;
+
    
     private bool readyToJump;
     private bool isJumping;
@@ -283,7 +292,7 @@ public class Player : MonoBehaviour
                 playerMovementControls = 1f;
                 if (dashVelocityLossTime > 0)
                 {
-                    Meter.Instance.AddNewMeterText("Wave Dash", (int)rb.velocity.magnitude);
+                    Meter.Instance.AddNewMeterText("Wave Dash", (int)(rb.velocity.magnitude/4f));
                     SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxChadMove);
                     dashVelocityLossTime = 0f;
                 }
@@ -312,19 +321,32 @@ public class Player : MonoBehaviour
     }
     private void SlowmoHandler()
     {
-        if (slowmoAction.action.ReadValue<float>() == 1)
+        slowMoMeter.localScale = new(slowMoVal, 1f, 1f);
+        if (slowMoWait > 0) slowMoWait -= Time.deltaTime * 0.4f;
+
+        if (slowmoAction.action.ReadValue<float>() == 1 && slowMoWait <= 0)
         {
             TimeManager.Instance.Slowmo(-1, 0.25f, -1);
+            slowMoVal -= Time.deltaTime * 0.3f;
+            if (slowMoVal <= 0)
+            { slowMoWait = 1f; }
         }
         else
         {
             TimeManager.Instance.Slowmo(-1, 1, -1);
+            if (slowMoVal < 1)
+            { slowMoVal += Time.deltaTime * 0.4f; }
         }
     }
     private void DashHandler()
     {
-        if (dashAction.action.WasPressedThisFrame())
+        dashMeter.localScale = new(dashVal, 1f, 1f);
+        if (dashVal < 1)
+        { dashVal += Time.deltaTime * 0.15f; }
+
+        if (dashAction.action.WasPressedThisFrame() && dashVal > 0.33)
         {
+            dashVal -= 0.33f;
             SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxDash);
             LevelManager.Instance.CameraShake();
             TimeManager.Instance.TimeStop(0.05f);

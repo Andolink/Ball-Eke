@@ -18,7 +18,7 @@ public class MeterText : MonoBehaviour
     void Update()
     {
         textMesh.text = text;
-        textMeshScore.text = "+"+score.ToString();
+        textMeshScore.text = (score > 0 ? "+" : "")+score.ToString();
         lifeTime -= Time.deltaTime;
         if (lifeTime <= 0)
         { 
