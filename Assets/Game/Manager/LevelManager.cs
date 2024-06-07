@@ -29,7 +29,7 @@ public class LevelManager : MonoBehaviour
     [HideInInspector] public float currentLevelScore = 0;
     [HideInInspector] public float globalScore = 0;
 
-    [SerializeField] private Level currentLoadedLevel;
+    [SerializeField] public Level currentLoadedLevel;
     [SerializeField] List<GameObject> levelToInstanciate = new List<GameObject>();
     
     private void OnEnable()
