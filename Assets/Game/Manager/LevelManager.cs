@@ -6,6 +6,7 @@ public class LevelManager : MonoBehaviour
 {
 
     static public int LevelNumber = 0;
+    static public int LvlIndex = 0;
     static public LevelManager Instance { get; private set; }
 
     [SerializeField] private TextMeshProUGUI textTimer;
@@ -18,7 +19,7 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private float levelTimer = 45f;
     [SerializeField] private float minLevelTimer = 15.0f;
-    private float deltaTimer = 5.0f;
+    private float deltaTimer = 10.0f;
 
     public int currentCompletedGoals = 0;
     private bool levelEnd = false;
@@ -55,8 +56,8 @@ public class LevelManager : MonoBehaviour
                     {
                         Meter.Instance.AddNewMeterText("SNCF!", 100);
                     }
-                }       
-                
+                }
+
                 gameOver = false;
                 LevelEnd();
             }
@@ -65,6 +66,8 @@ public class LevelManager : MonoBehaviour
 
     public void LevelLoad()
     {
+        levelEnd = true;
+
         TimeManager.Instance.SetTimePause(true);
 
         if (currentLoadedLevel)
@@ -73,8 +76,13 @@ public class LevelManager : MonoBehaviour
             Destroy(currentLoadedLevel.gameObject);
         }
 
-        levelEnd = true;
-        GameObject _lvl = Instantiate(levelToInstanciate[0], transform);
+        if (LvlIndex >= levelToInstanciate.Count)
+        {
+            LvlIndex = 0;
+            LevelNumber += 1;
+        }
+
+        GameObject _lvl = Instantiate(levelToInstanciate[LvlIndex], transform);
         currentLoadedLevel = _lvl.GetComponent<Level>();
         _lvl.transform.position = Vector3.zero;
         PlayerResetPosition();
@@ -82,6 +90,9 @@ public class LevelManager : MonoBehaviour
         player.transform.position = currentLoadedLevel.playerSpawn.position;
         levelTimer = currentLoadedLevel.timer;
         currentLevelScore = 0f;
+
+        // Difficulty
+        levelTimer = Mathf.Max(levelTimer - LevelNumber * deltaTimer, minLevelTimer);
 
         currentLoadedLevel.ResetBallSpawn();
         foreach (Grabable ball in currentLoadedLevel.balls)
@@ -159,7 +170,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            LevelNumber += 1;
+            LvlIndex += 1;
         }
 
         gameOver = false;

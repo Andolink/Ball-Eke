@@ -2313,6 +2313,8 @@ MonoBehaviour:
   currentLoadedLevel: {fileID: 0}
   levelToInstanciate:
   - {fileID: 4909467976132775056, guid: feac2aaaf9a5eba4db87cb97d5b42582, type: 3}
+  - {fileID: 6096447994739633604, guid: a3ca97a06423b0e488d6f74e9f004482, type: 3}
+  - {fileID: 6096447994739633604, guid: 9e29bc8a4e8436a4b8322ab83353ed53, type: 3}
 --- !u!114 &762756093
 MonoBehaviour:
   m_ObjectHideFlags: 0
