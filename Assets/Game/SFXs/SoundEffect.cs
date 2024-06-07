@@ -6,6 +6,7 @@ public class SoundEffect : MonoBehaviour
 {
     [SerializeField] public AudioSource audioSource;
     public float audioPitch = 1f;
+    public bool isDeltaTimeScaled = true;
 
     void Start()
     {
@@ -21,7 +22,7 @@ public class SoundEffect : MonoBehaviour
         }
         else
         {
-            audioSource.pitch = Time.timeScale * audioPitch;
+            audioSource.pitch = (isDeltaTimeScaled ? Time.timeScale : 1f) * audioPitch;
         }
     }
 }

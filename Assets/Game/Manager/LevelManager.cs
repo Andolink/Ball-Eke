@@ -15,7 +15,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject resultScreen;
     [SerializeField] private TextMeshProUGUI resultScore;
     [SerializeField] private TextMeshProUGUI resultSentence;
-
+    [SerializeField] private Pause pause;
 
     [SerializeField] private float levelTimer = 45f;
     [SerializeField] private float minLevelTimer = 15.0f;
@@ -46,7 +46,8 @@ public class LevelManager : MonoBehaviour
         if (!levelEnd && GameGlobalManager.Instance.currentState == GameGlobalManager.GameStates.Gameplay)
         {
             LevelTimerUpdate();
-            
+            pause.PauseStateUpdate();
+
             if (currentCompletedGoals >= currentLoadedLevel.balls.Count)
             {
                 if (player.transform.position.y <= 3f)

@@ -2729,6 +2729,7 @@ MonoBehaviour:
   resultScreen: {fileID: 1275532469}
   resultScore: {fileID: 643156239}
   resultSentence: {fileID: 1748022891}
+  pause: {fileID: 360649490}
   levelTimer: 45
   minLevelTimer: 15
   currentCompletedGoals: 0
@@ -3997,7 +3998,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1029194529
 RectTransform:
   m_ObjectHideFlags: 0

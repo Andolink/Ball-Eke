@@ -23,7 +23,7 @@ public class SFXManager : MonoBehaviour
         Instance = this;
     }
 
-    public void SfxPlay(AudioClip _audipClip, bool _addRandomPitch = true)
+    public void SfxPlay(AudioClip _audipClip, bool _addRandomPitch = true, bool _isDeltaTimeScaled = true)
     {
         if (_audipClip)
         {
@@ -37,10 +37,8 @@ public class SFXManager : MonoBehaviour
             {
                 _soundEffect.audioPitch = Random.Range(0.95f,1.05f);
             }
-        }
-        else
-        {
-            Debug.Log("wtf ij   zgrhcpaoekq,dhkcmgaoe jimo");
+            _soundEffect.isDeltaTimeScaled = _isDeltaTimeScaled;
+
         }
     }
 

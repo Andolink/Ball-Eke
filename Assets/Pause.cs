@@ -7,9 +7,9 @@ public class Pause : MonoBehaviour
     public bool isPause = false;
     [SerializeField] GameObject MainMenu;
 
-    private void Update()
+    public void PauseStateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && MainMenu.activeSelf == false)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             isPause = !isPause;
             transform.GetChild(0).gameObject.SetActive(isPause);
