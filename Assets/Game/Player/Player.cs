@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
@@ -10,6 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField] private CapsuleCollider ownCollider;
     [SerializeField] private ParticleSystem speedParticules;
     [SerializeField] private Animator cursorAnimator;
+    [SerializeField] private RectTransform slowMoUI;
+
 
     [Header("VFX")]
 
@@ -321,6 +324,8 @@ public class Player : MonoBehaviour
     }
     private void SlowmoHandler()
     {
+       
+
         slowMoMeter.localScale = new(slowMoVal, 1f, 1f);
         if (slowMoWait > 0) slowMoWait -= Time.deltaTime * 0.4f;
 
@@ -330,12 +335,16 @@ public class Player : MonoBehaviour
             slowMoVal -= Time.deltaTime * 0.3f;
             if (slowMoVal <= 0)
             { slowMoWait = 1f; }
+
+            slowMoUI.localScale = Vector3.Lerp(slowMoUI.localScale, Vector3.one, Time.unscaledDeltaTime * 8f);
         }
         else
         {
             TimeManager.Instance.Slowmo(-1, 1, -1);
             if (slowMoVal < 1)
             { slowMoVal += Time.deltaTime * 0.4f; }
+
+            slowMoUI.localScale = Vector3.Lerp(slowMoUI.localScale, Vector3.one * 2f, Time.unscaledDeltaTime * 8f);
         }
     }
     private void DashHandler()

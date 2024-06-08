@@ -25,7 +25,7 @@ public class Pause : MonoBehaviour
         }
 
 
-        ballText.text = "Monstres restant : " + ballLeft;
+        ballText.text = "Eke(s) Left : " + ballLeft;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             isPause = !isPause;

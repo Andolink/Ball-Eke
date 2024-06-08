@@ -37,7 +37,7 @@ public class Ending : MonoBehaviour
             else
             {
                 Vector3 _attraction = ((transform.position+Vector3.down) - ball.transform.position).normalized * 4f;
-                ball.rb.velocity = Vector3.Lerp(ball.rb.velocity, _attraction, Time.deltaTime * 10f);
+                ball.rb.velocity = Vector3.Lerp(ball.rb.velocity, _attraction, Time.deltaTime * ball.rb.velocity.magnitude * 2f);
             }
         }
     }

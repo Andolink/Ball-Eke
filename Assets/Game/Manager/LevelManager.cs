@@ -14,8 +14,11 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject resultScreen;
     [SerializeField] private TextMeshProUGUI resultScore;
     [SerializeField] private TextMeshProUGUI resultSentence;
+    [SerializeField] private GameObject resultContinue;
+
     [SerializeField] private Pause pause;
     [SerializeField] private GameObject finalResultScreen;
+
 
 
     [SerializeField] private float levelTimer = 45f;
@@ -185,10 +188,10 @@ public class LevelManager : MonoBehaviour
             LvlIndex += 1;
         }
 
-        gameOver = false;
+        
         textTimer.text = ""; 
         TimeManager.Instance.SetTimePause(true);
-        levelEnd = true;
+        
 
         Meter.Instance.ClearMeter();
         GameGlobalManager.Instance.UIGame.SetActive(false);
@@ -196,6 +199,10 @@ public class LevelManager : MonoBehaviour
         resultScreen.SetActive(true);
         resultScore.text = currentLevelScore.ToString();
         resultSentence.text = _text;
+        resultContinue.SetActive(!gameOver);
+
+        levelEnd = true;
+        gameOver = false;
     }
 
     public void Continue()
