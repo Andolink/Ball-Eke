@@ -217,7 +217,7 @@ public class LevelManager : MonoBehaviour
         finalResultScreen.SetActive(true);
     }
 
-    public void CameraShake(float _magnitude = 0.1f, float _loss = 5f, float _time = 0.1f)
+    public void CameraShake(float _magnitude = 0.1f, float _loss = 2f, float _time = 0.1f)
     {
         gameCamera.Shake(_magnitude, _loss, _time);
     }

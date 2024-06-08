@@ -252,7 +252,7 @@ public class Player : MonoBehaviour
         }
 
         jumpBuffer -= Time.deltaTime;
-        if (jumpAction.action.ReadValue<float>() == 1)
+        if (jumpAction.action.WasPressedThisFrame())//.ReadValue<float>() == 1)
         {
             jumpBuffer = 0.05f;
         }
@@ -348,7 +348,7 @@ public class Player : MonoBehaviour
         {
             dashVal -= 0.33f;
             SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxDash);
-            LevelManager.Instance.CameraShake();
+            LevelManager.Instance.CameraShake(3.5f, 4f, 0.1f);
             TimeManager.Instance.TimeStop(0.05f);
             float _velocityMagnitude = rb.velocity.magnitude + 2f;
             if (_velocityMagnitude < dashSpeed)
@@ -431,31 +431,13 @@ public class Player : MonoBehaviour
     private void TrowCurrentObject()
     {
         float _velocity = trowForce;
-        /*
-        Vector3 _currentPosition = transform.position;
-        Vector3 _targetPosition = targetPosition.position;//lookAt.position + lookAt.forward * _velocity;
-
-
-        float _deltaY   = _targetPosition.y - _currentPosition.y;
-        float _maxY     = _deltaY + 2f;
-        float _deltaZ   = _targetPosition.z - _currentPosition.z;
-        float _deltaX   = _targetPosition.x - _currentPosition.x;
-        float _deltaF   = Mathf.Sqrt(_deltaX * _deltaX + _deltaZ * _deltaZ);
-        float _grav     = 9.8f;
-
-        float _y        = Mathf.Sqrt(2 * _grav * _maxY);
-        float _delta    = 2 * _grav * (_maxY - _deltaY);
-        float _f        = (Mathf.Sqrt(_delta)+_y)/ _deltaF;
-        
-        Vector3 _finalDir = lookAt.forward * _f + Vector3.up * _y;
-
-        Debug.Log(string.Format("Foward {0} | Y {1}", _f, _y));
-        */
-        Vector3 _finalDir = lookAt.forward * trowForce + Vector3.up * trowForce * 0.85f;
+        Vector3 _finalDir = lookAt.forward * trowForce + (Vector3.up * trowForce * 0.28f);
 
         grabedObject.transform.position = lookAt.position + lookAt.forward * 1f;
         grabedObject.Trow(_finalDir);
         grabedObject = null;
+
+        LevelManager.Instance.CameraShake(25f,30f,0.025f);
 
         vfxTrow.gameObject.SetActive(true);
     }
