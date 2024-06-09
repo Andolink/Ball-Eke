@@ -391,7 +391,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &31135536
 RectTransform:
@@ -3182,6 +3182,7 @@ MonoBehaviour:
   globalScore: 0
   currentLoadedLevel: {fileID: 0}
   levelToInstanciate:
+  - {fileID: 6096447994739633604, guid: 01390d6f9f0863547a27d4717de0fa61, type: 3}
   - {fileID: 3056702178553473256, guid: a108d6d80833e504480cbc4eb77ea07d, type: 3}
   - {fileID: 3056702178553473256, guid: 7d2b027cb8308874594ecb1678638cae, type: 3}
   - {fileID: 3056702178553473256, guid: ee8bff9efa7bd8e44963f335466fed19, type: 3}

@@ -17,7 +17,7 @@ public class Grabable : MonoBehaviour
     private Transform defaultParent = null;
     public Vector3 defaultPosition;
 
-    bool isGrabed = false;
+    public bool isGrabed = false;
     bool hasBeenGrounded = true;
     bool isEnding = false;
 

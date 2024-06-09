@@ -34,6 +34,8 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] public Level currentLoadedLevel;
     [SerializeField] List<GameObject> levelToInstanciate = new List<GameObject>();
+
+    static private bool tutorielPassed = false;
     
     private void OnEnable()
     {
@@ -186,6 +188,11 @@ public class LevelManager : MonoBehaviour
             }
 
             LvlIndex += 1;
+            if (!tutorielPassed)
+            {
+                tutorielPassed = true;
+                levelToInstanciate.RemoveAt(0);
+            }
         }
 
         
