@@ -7,7 +7,7 @@ public class Tutoriel : MonoBehaviour
 
     private readonly string[] Objs =
     {
-        "Move using WASD/ZQSD.",
+        "Welcome, Lebron Jam, to Ball-EKE's mysterious world!\nMove using WASD/ZQSD.",
         "Jump using Space!",
         "Do a Wall Jump!",
         "Dash using A.",
@@ -32,7 +32,7 @@ public class Tutoriel : MonoBehaviour
     private bool success = false;
     private bool next = false;
 
-    private float TimerBetweenObj = 1f;
+    private float TimerBetweenObj = 1.8f;
     private float timer = 0;
 
     public Grabable ball;
@@ -40,7 +40,8 @@ public class Tutoriel : MonoBehaviour
     void Start()
     {
         LevelManager.Instance.TextboxEnable(true);
-        LevelManager.Instance.TextboxText("Welcome, Lebron Jam, to Ball-EKE's mysterious W.O.R.L.D!");
+        LevelManager.Instance.TextboxText("Welcome, Lebron Jam, to Ball-EKE's mysterious world!");
+        timer = 2f;
         FirstObj();
     }
 
@@ -133,7 +134,7 @@ public class Tutoriel : MonoBehaviour
         }
         else
         {
-            LevelManager.Instance.TextboxText("Great! Now have F.U.N!");
+            LevelManager.Instance.TextboxText("...");
         }
     }
 

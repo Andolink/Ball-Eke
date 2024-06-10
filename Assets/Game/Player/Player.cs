@@ -109,6 +109,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (Time.unscaledDeltaTime == 0) return;
+
         GroundedHandler();
         
         MovePlayer();

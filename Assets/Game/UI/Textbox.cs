@@ -8,6 +8,7 @@ public class Textbox : MonoBehaviour
     public bool isActivated = false;
     public string textToDisplay = "";
     public TextMeshProUGUI textMesh;
+    public Vector3 size = Vector3.zero;
     RectTransform rect;
     Vector3 defaultPos = Vector3.zero;
     void Start()
@@ -19,10 +20,11 @@ public class Textbox : MonoBehaviour
 
     void Update()
     {
-        Vector3 _pos = defaultPos;
-        _pos += isActivated ? Vector3.zero : Vector3.right * 10000f;
+        Vector3 _rot = isActivated ? Vector3.one : Vector3.zero;
 
-        rect.position = Vector3.Lerp(rect.position, _pos, Time.unscaledDeltaTime);
+        size = Vector3.Lerp(size, _rot, Time.unscaledDeltaTime * 15f);
+
+        rect.localScale = size;
         textMesh.text = textToDisplay;
     }
 }

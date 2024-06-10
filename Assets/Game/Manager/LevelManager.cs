@@ -75,7 +75,7 @@ public class LevelManager : MonoBehaviour
         RenderSettings.skybox.SetColor("_GroundColor", Color.white - targetColor);
         if (DirLight)
         {
-            DirLight.color = Color.white;
+            DirLight.color = targetColor;
         }
     }
 
@@ -195,6 +195,7 @@ public class LevelManager : MonoBehaviour
     public void LevelEnd()
     {
         TextboxEnable(false);
+        CameraShake(0f,0f,0f);
         string _text = "*Personal Thought : ";
         
         if (gameOver)
@@ -286,7 +287,11 @@ public class LevelManager : MonoBehaviour
 
     public void TextboxText(string _text)
     {
-        textbox.textToDisplay = _text;
+        if (textbox.textToDisplay != _text)
+        {
+            textbox.size = textbox.size * 0.85f;
+        }
+        textbox.textToDisplay = _text;   
     }
 
 }
