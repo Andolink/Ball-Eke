@@ -3,32 +3,28 @@ using UnityEngine;
 
 public class Tutoriel : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI TutoText;
-
-    [SerializeField] private TextMeshProUGUI Objtext;
-
     private bool WallJumpTriggered = false;
 
     private readonly string[] Objs =
     {
-        "- [ ] Bouger avec ZQSD.",
-        "- [ ] Sauter avec Espace.",
-        "- [ ] Faire un Wall Jump",
-        "- [ ] Dash avec A.",
-        "- [ ] Ralentir le temps avec Shift.",
-        "- [ ] Ramasser quelque chose (viser et utiliser clic droit).",
-        "- [ ] Lancer avec clic gauche."
+        "Move using WASD/ZQSD.",
+        "Jump using Space!",
+        "Do a Wall Jump!",
+        "Dash using A.",
+        "Slow down time using Shift.",
+        "Grab me using R-Click.",
+        "Trow me using L-Click."
     };
 
     private readonly string[] Success =
     {
-        "- [X] Bouger avec ZQSD.",
-        "- [X] Sauter avec Espace.",
-        "- [X] Faire un Wall Jump",
-        "- [X] Dash avec A.",
-        "- [X] Ralentir le temps avec Shift.",
-        "- [X] Ramasser quelque chose (viser et utiliser clic droit).",
-        "- [X] Lancer avec clic gauche."
+        "MOVE MOVE MOVE!!",
+        "Wow look at that height!",
+        "JUMP JUMP JUMP!!",
+        "ZOOOOOOOOOOO!!",
+        "A  W  E  S  O  M  E ! !",
+        "~hold me daddy~",
+        "WAAAAAAAAAAA!!"
     };
 
     private int ObjIndex = 0;
@@ -36,14 +32,15 @@ public class Tutoriel : MonoBehaviour
     private bool success = false;
     private bool next = false;
 
-    private float TimerBetweenObj = 3;
+    private float TimerBetweenObj = 1f;
     private float timer = 0;
 
     public Grabable ball;
 
     void Start()
     {
-        TutoText.text = "Bienvenue, commençons par les bases :";
+        LevelManager.Instance.TextboxEnable(true);
+        LevelManager.Instance.TextboxText("Welcome, Lebron Jam, to Ball-EKE's mysterious W.O.R.L.D!");
         FirstObj();
     }
 
@@ -78,7 +75,7 @@ public class Tutoriel : MonoBehaviour
                 if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
                 {
                     success = true;
-                    TutoText.text = "";
+                    LevelManager.Instance.TextboxText("");
                 }
                 break;
             case 1:
@@ -122,7 +119,7 @@ public class Tutoriel : MonoBehaviour
 
     private void Sucess()
     {
-        Objtext.text = Success[ObjIndex];
+        LevelManager.Instance.TextboxText(Success[ObjIndex]);
         timer = TimerBetweenObj;
         next = true;
     }
@@ -132,17 +129,17 @@ public class Tutoriel : MonoBehaviour
         ObjIndex++;
         if (ObjIndex < Objs.Length)
         {
-            Objtext.text = Objs[ObjIndex];
+            LevelManager.Instance.TextboxText(Objs[ObjIndex]);
         }
         else
         {
-            Objtext.text = "Tutoriel terminé ! Marquez un panier maintenant ! (Astuce : lancer dans l'anneau et gagner des points bonus !)";
+            LevelManager.Instance.TextboxText("Great! Now have F.U.N!");
         }
     }
 
     private void FirstObj()
     {
-        Objtext.text = Objs[0];
+        LevelManager.Instance.TextboxText(Objs[0]);
     }
 
     private void OnTriggerEnter(Collider other)

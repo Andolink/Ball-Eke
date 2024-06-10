@@ -32,7 +32,14 @@ public class LevelManager : MonoBehaviour
     [SerializeField] List<GameObject> levelToInstanciate = new List<GameObject>();
 
     static private bool tutorielPassed = false;
-    
+
+    [SerializeField] private Light DirLight;
+    private float colorChangeSpeed = 0.08f;
+    public float cycleTime = 0f;
+    private List<Color> colors = new();
+
+    public Textbox textbox;
+
     private void OnEnable()
     {
         Instance = this;
@@ -40,16 +47,13 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        //LevelStart();
-    }
-
-    [SerializeField] private Light DirLight;
-    private float colorChangeSpeed = 0.01f;
-    private float cycleTime = 2.5f;
-
-    private void FixedUpdate()
-    {
-        CycleSkyColor();
+        colors.Add(Color.green);
+        colors.Add(Color.cyan);
+        colors.Add(Color.blue);
+        colors.Add(Color.magenta);
+        colors.Add(Color.red);
+        colors.Add(new Color(0,0,0.1f));
+        colors.Add(Color.green);
     }
 
     private void CycleSkyColor(bool force = false)
@@ -60,23 +64,26 @@ public class LevelManager : MonoBehaviour
             return;
 
         cycleTime += colorChangeSpeed * Time.deltaTime;
+        if (cycleTime >= colors.Count-2)
+        {
+            cycleTime -= colors.Count-2;
+        }
 
-        float r = Mathf.Sin(cycleTime) * 0.25f + 0.25f;
-        float g = Mathf.Sin(cycleTime + Mathf.PI / 3) * 0.25f + 0.25f;
-        float b = Mathf.Sin(cycleTime + 2 * Mathf.PI / 3) * 0.25f + 0.25f;
+        Color targetColor = Color.Lerp(colors[(int)cycleTime], colors[(int)cycleTime+1], cycleTime - (int)cycleTime);
 
-        Color targetColor = new Color(r, g, b);
         RenderSettings.skybox.SetColor("_SkyTint", targetColor);
         RenderSettings.skybox.SetColor("_GroundColor", Color.white - targetColor);
         if (DirLight)
         {
-            DirLight.color = targetColor;
+            DirLight.color = Color.white;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        CycleSkyColor();
+
         if (!levelEnd && GameGlobalManager.Instance.currentState == GameGlobalManager.GameStates.Gameplay)
         {
             LevelTimerUpdate();
@@ -107,8 +114,6 @@ public class LevelManager : MonoBehaviour
     public void LevelLoad()
     {
         levelEnd = true;
-
-        cycleTime += 2.0f;
         CycleSkyColor(true);
 
         
@@ -189,6 +194,7 @@ public class LevelManager : MonoBehaviour
 
     public void LevelEnd()
     {
+        TextboxEnable(false);
         string _text = "*Personal Thought : ";
         
         if (gameOver)
@@ -271,6 +277,16 @@ public class LevelManager : MonoBehaviour
     public void CameraShake(float _magnitude = 0.1f, float _loss = 2f, float _time = 0.1f)
     {
         gameCamera.Shake(_magnitude, _loss, _time);
+    }
+
+    public void TextboxEnable(bool _val)
+    {
+        textbox.isActivated = _val;
+    }
+
+    public void TextboxText(string _text)
+    {
+        textbox.textToDisplay = _text;
     }
 
 }
