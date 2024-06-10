@@ -150,6 +150,8 @@ public class LevelManager : MonoBehaviour
             ball.defaultPosition = currentLoadedLevel.RandomEmptyBallSpawn();
             ball.Respawn();
         }
+
+        DynamicGI.UpdateEnvironment();
     }
 
     public void LevelUnload()
@@ -202,7 +204,7 @@ public class LevelManager : MonoBehaviour
         {
             switch ((int)Random.Range(0, 10))
             {
-                default :  _text += "A NIGHTMARE WORSE THAT CAPITALISM HAS COME!"; break;
+                default :  _text += "WORSE THAT CAPITALISM HAS COME, YOU."; break;
                 case 0 : _text += "TOO BALLED..."; break;
                 case 1: _text += "I GUESS YOU'RE NOT AN EPIC G4M3R LIKE ME."; break;
                 case 2: _text += "YA BETTER GO BACK PLAY ADIDOU RN"; break;
@@ -227,11 +229,14 @@ public class LevelManager : MonoBehaviour
                 case 4: _text += "LOL < YOU"; break;
             }
 
-            LvlIndex += 1;
             if (!tutorielPassed)
             {
                 tutorielPassed = true;
                 levelToInstanciate.RemoveAt(0);
+            }
+            else
+            {
+                LvlIndex += 1;
             }
         }
 

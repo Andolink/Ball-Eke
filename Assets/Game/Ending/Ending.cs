@@ -52,7 +52,6 @@ public class Ending : MonoBehaviour
         {
             isBallInside = true;
             ball = _ball;
-            Meter.Instance.AddNewMeterText("???", 1);
         }
     }
 

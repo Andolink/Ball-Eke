@@ -20,10 +20,9 @@ public class DeathZone : MonoBehaviour
         {
             LevelManager.Instance.PlayerResetPosition();
             Meter.Instance.AddNewMeterText("Big Skill Issue", -100);
-            SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxSkillIssue);
-
+            SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxDjScratch);
         }
-
+        
         if (_collider.TryGetComponent(out Grabable _grab))
         {
             Meter.Instance.AddNewMeterText("Skill Issue", -25);

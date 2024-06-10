@@ -7,7 +7,7 @@ public class Tutoriel : MonoBehaviour
 
     private readonly string[] Objs =
     {
-        "Welcome, Lebron Jam, to Ball-EKE's mysterious world!\nMove using WASD/ZQSD.",
+        "Welcome Lebran, to ekes's mysterious world! Move using WASD/ZQSD.",
         "Jump using Space!",
         "Do a Wall Jump!",
         "Dash using A.",
