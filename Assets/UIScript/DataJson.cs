@@ -11,6 +11,7 @@ public class DataJson : MonoBehaviour
     private string pseudo;
     private int playerPos;
     [SerializeField] CharacterList defaultStats = new CharacterList();
+    GameObject pseudoArea;
 
     private void Start()
     {
@@ -19,11 +20,12 @@ public class DataJson : MonoBehaviour
         LoadData();
     }
 
-    public void Register(GameObject pseudoArea)
+    public void Register(GameObject _pseudoArea)
     {
-        RegisterUI.SetActive(false);
-        pseudo = pseudoArea.GetComponent<TMP_Text>().text;
-        gameObject.SetActive(true);
+        LevelManager.Instance.ScoreBoardScreen();
+        pseudoArea = _pseudoArea;
+        pseudo = _pseudoArea.GetComponent<TMP_Text>().text;
+        pseudoArea.GetComponent<TMP_Text>().text = "";
     }
 
     private void LoadData()
@@ -34,23 +36,23 @@ public class DataJson : MonoBehaviour
             CreateDefaultJson();
         }
         
-            SaveData();
+        SaveData();
 
-            // CODE POUR AFFICHER LES SCORES
-            if(playerPos > 2)
-            {
-                GameObject ISBAD = gameObject.transform.Find("Top").Find("top4").gameObject;
-                ISBAD.SetActive(true);
-                ISBAD.GetComponent<TMP_Text>().text = playerPos++ + "   " + LevelManager.Instance.currentLevelScore + "   " + pseudo;
-            }
+        // CODE POUR AFFICHER LES SCORES
+        if(playerPos > 2)
+        {
+            GameObject ISBAD = gameObject.transform.Find("Top").Find("top4").gameObject;
+            ISBAD.SetActive(true);
+            ISBAD.GetComponent<TMP_Text>().text = playerPos++ + "   " + LevelManager.Instance.globalScore + "   " + pseudo;
+        }
 
-            for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
+        {
+            if (defaultStats.characterList.Count > i)
             {
-                if (defaultStats.characterList.Count > i)
-                {
-                    gameObject.transform.Find("Top").transform.Find("top" + (i+1)).gameObject.GetComponent<TMP_Text>().text = (i+1) + "   " + defaultStats.characterList[i].score + "   " + defaultStats.characterList[i].pseudo;
-                }
+                gameObject.transform.Find("Top").transform.Find("top" + (i+1)).gameObject.GetComponent<TMP_Text>().text = (i+1) + "   " + defaultStats.characterList[i].score + "   " + defaultStats.characterList[i].pseudo;
             }
+        }
     }
 
     private void SaveData()
@@ -63,7 +65,7 @@ public class DataJson : MonoBehaviour
         foreach (CharacterStats players in defaultStats.characterList)
         {
             Debug.Log(players.pseudo);
-            if (LevelManager.Instance.currentLevelScore < players.score)
+            if (LevelManager.Instance.globalScore < players.score)
             {
                 playerPos++;
             }
@@ -71,7 +73,7 @@ public class DataJson : MonoBehaviour
         CharacterStats player = new CharacterStats
         {
             pseudo = pseudo,
-            score = LevelManager.Instance.currentLevelScore
+            score = LevelManager.Instance.globalScore
         }; 
 
         if (defaultStats.characterList.Count == 0)
@@ -90,6 +92,7 @@ public class DataJson : MonoBehaviour
         File.WriteAllText(filePath, json);
 
         Debug.Log("Saved");
+        
     }
 
     private void CreateDefaultJson()
