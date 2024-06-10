@@ -16,6 +16,7 @@ public class Grabable : MonoBehaviour
     private MeshRenderer meshRenderer = null;
     private Transform defaultParent = null;
     public Vector3 defaultPosition;
+    public Vector3 lastTrow = Vector3.zero;
 
     bool isGrabed = false;
     bool hasBeenGrounded = true;
@@ -27,6 +28,7 @@ public class Grabable : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
         defaultParent = transform.parent;
+        lastTrow = transform.position;
     }
 
     public void Update()
@@ -73,6 +75,7 @@ public class Grabable : MonoBehaviour
 
     public void Trow(Vector3 _velocity)
     {
+        lastTrow = transform.position;
         SFXManager.Instance.SfxPlay(SFXManager.Instance.sfxTrow);
 
         rebond = 0;

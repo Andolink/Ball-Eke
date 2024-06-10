@@ -25,8 +25,12 @@ public class Ending : MonoBehaviour
                 LevelManager.Instance.currentCompletedGoals++;
 
                 float _bonusScore = ball.rb.velocity.magnitude * ball.rb.velocity.magnitude;
+                float _distanceBonus = (transform.position - ball.lastTrow).magnitude ;
+                _distanceBonus *= _distanceBonus * 0.25f;
 
-                if (_bonusScore >= 100f) Meter.Instance.AddNewMeterText("VeloCity's PREMIUM", (int)_bonusScore);
+                //if (_bonusScore >= 100f) Meter.Instance.AddNewMeterText("VeloCity's PREMIUM", (int)_bonusScore);
+                if (_distanceBonus >= 30f) Meter.Instance.AddNewMeterText("Sniper", (int)_distanceBonus);
+
 
                 if (ball.rebond == 0)
                 { Meter.Instance.AddNewMeterText("BALEK!!", 300); }

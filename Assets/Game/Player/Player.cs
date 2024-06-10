@@ -393,6 +393,7 @@ public class Player : MonoBehaviour
                 ResetMovement(Vector3.zero);
                 gravitySlam = gravity;
                 isSlaming = true;
+                speedLimit += Time.deltaTime * 2f;
             }
             else if(slideAction.action.WasReleasedThisFrame() && isSlaming)
             {
@@ -440,7 +441,7 @@ public class Player : MonoBehaviour
     private void TrowCurrentObject()
     {
         float _velocity = trowForce;
-        Vector3 _finalDir = lookAt.forward * trowForce + (Vector3.up * trowForce * 0.28f);
+        Vector3 _finalDir = lookAt.forward * trowForce + (Vector3.up * trowForce * 0.28f) + new Vector3(0.5f * rb.velocity.x, 0.25f * rb.velocity.y ,0.5f * rb.velocity.z );
 
         grabedObject.transform.position = lookAt.position + lookAt.forward * 1f;
         grabedObject.Trow(_finalDir);
