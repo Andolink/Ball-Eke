@@ -5,10 +5,21 @@ public class GameGlobalManager : MonoBehaviour
 {
     static public GameGlobalManager Instance { get; private set; }
 
-    [SerializeField] public GameObject UIGame;
-    [SerializeField] public GameObject UIMainMenu;
+    
     [SerializeField] public GameObject MainMenuRoot;
     [SerializeField] public GameObject PlayerPackage;
+
+    [Header("UI")]
+
+    [SerializeField] public GameObject UIMainMenu;
+    [SerializeField] public GameObject UIGame;
+    [SerializeField] public GameObject UIPause;
+    [SerializeField] public GameObject UIOption;
+    [SerializeField] public GameObject UIResult;
+    [SerializeField] public GameObject UIRegister;
+    [SerializeField] public GameObject UIScoreBoard;
+   
+    [Header("Icon Transition")]
 
     [SerializeField] private GameObject UIRoot;
     [SerializeField] private GameObject prefabEndIcon;
@@ -16,8 +27,20 @@ public class GameGlobalManager : MonoBehaviour
     private bool iconTrasition = false;
     private float iconTransitionEndTimer = 0f;
     private float timeIconSpawn = 0;
+    private float currentUIScale = 1f;
     private List<GameObject> endIconList = new List<GameObject>();
 
+
+    public enum UIState
+    {
+        TitleScreen,
+        Game,
+        Pause,
+        Option,
+        Result,
+        Register,
+        ScoreBoard
+    }
     public enum GameStates
     { 
         TitleScreen,
@@ -27,6 +50,9 @@ public class GameGlobalManager : MonoBehaviour
 
     public GameStates currentState  = GameStates.TitleScreen;
     public GameStates nextState     = GameStates.TitleScreen;
+
+    public UIState currentUI = UIState.TitleScreen;
+    public UIState previousUI = UIState.Game;
 
     private void OnEnable()
     {
@@ -41,11 +67,11 @@ public class GameGlobalManager : MonoBehaviour
     void Update()
     {
         IconTransition();
+        UpdateUI();
     }
 
     public void GoToPlayMode()
     {
-        Debug.Log("Mom");
         StartTransition();
         nextState = GameStates.Gameplay;
     }
@@ -100,7 +126,7 @@ public class GameGlobalManager : MonoBehaviour
         {
             case GameStates.TitleScreen:
 
-                
+                ChangeUI(UIState.TitleScreen);
 
                 break;
             case GameStates.Gameplay:
@@ -163,13 +189,54 @@ public class GameGlobalManager : MonoBehaviour
         }
     }
 
+    public void ChangeUI(UIState _ui)
+    {
+        previousUI = currentUI;
+        currentUI = _ui;
+        currentUIScale = 2f;
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        GetUIGameObject(previousUI).SetActive(false);
+        GetUIGameObject(currentUI).SetActive(true);
+        GetUIGameObject(currentUI).GetComponent<RectTransform>().localScale = Vector3.one * currentUIScale;
+
+        currentUIScale = Mathf.Lerp(currentUIScale, 1f, Time.unscaledDeltaTime * 12f);
+    }
+
+    private GameObject GetUIGameObject(UIState _uiState)
+    {
+        GameObject _menu = null;
+        switch ( _uiState )
+        {
+            case UIState.TitleScreen :  _menu = UIMainMenu; break;
+            case UIState.Game:          _menu = UIGame; break;
+            case UIState.Pause:         _menu = UIPause; break;
+            case UIState.Option:        _menu = UIOption; break;
+            case UIState.Result:        _menu = UIResult; break;
+            case UIState.Register:      _menu = UIRegister; break;
+            case UIState.ScoreBoard:    _menu = UIScoreBoard; break;
+        }
+
+        return _menu;
+    }
+
     //-------------------------------Options----------------------------//
     public void OpenOptions()
     {
-        UIMainMenu.transform.Find("Options").gameObject.SetActive(true);
+        ChangeUI(UIState.Option);
     }
     public void CloseOptions()
     {
-        UIMainMenu.transform.Find("Options").gameObject.SetActive(false);
+        if (previousUI == UIState.TitleScreen)
+        {
+            ChangeUI(UIState.TitleScreen);
+        }
+        else
+        {
+            ChangeUI(UIState.Pause);
+        }
     }
 }

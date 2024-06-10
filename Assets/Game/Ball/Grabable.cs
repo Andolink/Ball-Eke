@@ -20,7 +20,7 @@ public class Grabable : MonoBehaviour
 
     bool isGrabed = false;
     bool hasBeenGrounded = true;
-    bool isEnding = false;
+    [HideInInspector] public bool isEnding = false;
 
     void Start()
     {

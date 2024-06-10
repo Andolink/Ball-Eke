@@ -11,14 +11,10 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textTimer;
     [SerializeField] private Player player;
     [SerializeField] private GameCamera gameCamera;
-    [SerializeField] private GameObject resultScreen;
     [SerializeField] private TextMeshProUGUI resultScore;
     [SerializeField] private TextMeshProUGUI resultSentence;
     [SerializeField] private GameObject resultContinue;
-
     [SerializeField] private Pause pause;
-    [SerializeField] private GameObject finalResultScreen;
-
 
 
     [SerializeField] private float levelTimer = 45f;
@@ -73,7 +69,8 @@ public class LevelManager : MonoBehaviour
     public void LevelLoad()
     {
         levelEnd = true;
-
+        
+        GameGlobalManager.Instance.ChangeUI(GameGlobalManager.UIState.Game);
         TimeManager.Instance.SetTimePause(true);
 
         if (currentLoadedLevel)
@@ -106,9 +103,6 @@ public class LevelManager : MonoBehaviour
             ball.defaultPosition = currentLoadedLevel.RandomEmptyBallSpawn();
             ball.Respawn();
         }
-
-        resultScreen.SetActive(false);
-        GameGlobalManager.Instance.UIGame.SetActive(true);
     }
 
     public void LevelUnload()
@@ -127,7 +121,6 @@ public class LevelManager : MonoBehaviour
 
     public void LevelStart()
     {
-        resultScreen.SetActive(false);
         GameGlobalManager.Instance.ChangeCursorStat(false);
         
         currentCompletedGoals = 0;
@@ -194,9 +187,10 @@ public class LevelManager : MonoBehaviour
         
 
         Meter.Instance.ClearMeter();
-        GameGlobalManager.Instance.UIGame.SetActive(false);
+
+        GameGlobalManager.Instance.ChangeUI(GameGlobalManager.UIState.Result);
         GameGlobalManager.Instance.ChangeCursorStat(true);
-        resultScreen.SetActive(true);
+
         resultScore.text = currentLevelScore.ToString();
         resultSentence.text = _text;
         resultContinue.SetActive(!gameOver);
@@ -212,16 +206,18 @@ public class LevelManager : MonoBehaviour
      
     public void Quit()
     {
-
-        finalResultScreen.SetActive(false);
         GameGlobalManager.Instance.GoToMainMenu();
         GameGlobalManager.Instance.StartTransition();
     }
 
-    public void ResultScreen()
+    public void RegisterScreen()
     {
-        resultScreen.SetActive(false);
-        finalResultScreen.SetActive(true);
+        GameGlobalManager.Instance.ChangeUI(GameGlobalManager.UIState.Register);
+    }
+
+    public void ScoreBoardScreen()
+    {
+        GameGlobalManager.Instance.ChangeUI(GameGlobalManager.UIState.ScoreBoard);
     }
 
     public void CameraShake(float _magnitude = 0.1f, float _loss = 2f, float _time = 0.1f)

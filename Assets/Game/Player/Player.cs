@@ -393,7 +393,7 @@ public class Player : MonoBehaviour
                 ResetMovement(Vector3.zero);
                 gravitySlam = gravity;
                 isSlaming = true;
-                speedLimit += Time.deltaTime * 2f;
+               // speedLimit += Time.deltaTime * 2f;
             }
             else if(slideAction.action.WasReleasedThisFrame() && isSlaming)
             {
