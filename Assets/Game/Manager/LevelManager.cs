@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour
 
 
     [SerializeField] private float levelTimer = 45f;
-    [SerializeField] private float minLevelTimer = 15.0f;
+    [SerializeField] private float minLevelTimer = 20.0f;
     private float deltaTimer = 10.0f;
 
     public int currentCompletedGoals = 0;
@@ -64,6 +64,11 @@ public class LevelManager : MonoBehaviour
                 LevelEnd();
             }
         }
+    }
+
+    public void ResetLevelDifficulty()
+    {
+        LvlIndex = 0;
     }
 
     public void LevelLoad()
@@ -217,6 +222,7 @@ public class LevelManager : MonoBehaviour
 
     public void ScoreBoardScreen()
     {
+        ResetLevelDifficulty();
         GameGlobalManager.Instance.ChangeUI(GameGlobalManager.UIState.ScoreBoard);
     }
 
