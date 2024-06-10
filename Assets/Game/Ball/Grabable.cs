@@ -18,7 +18,7 @@ public class Grabable : MonoBehaviour
     public Vector3 defaultPosition;
     public Vector3 lastTrow = Vector3.zero;
 
-    bool isGrabed = false;
+    public bool isGrabed = false;
     bool hasBeenGrounded = true;
     [HideInInspector] public bool isEnding = false;
 

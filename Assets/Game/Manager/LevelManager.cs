@@ -30,6 +30,8 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] public Level currentLoadedLevel;
     [SerializeField] List<GameObject> levelToInstanciate = new List<GameObject>();
+
+    static private bool tutorielPassed = false;
     
     private void OnEnable()
     {
@@ -39,6 +41,37 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         //LevelStart();
+    }
+
+    [SerializeField] private Light DirLight;
+    private float colorChangeSpeed = 0.01f;
+    private float cycleTime = 2.5f;
+
+    private void FixedUpdate()
+    {
+        CycleSkyColor();
+    }
+
+    private void CycleSkyColor(bool force = false)
+    {
+        if (!force && (levelEnd || !(GameGlobalManager.Instance.currentState == GameGlobalManager.GameStates.Gameplay)))
+            return;
+        if (!RenderSettings.skybox || !RenderSettings.skybox.HasProperty("_SkyTint") || !RenderSettings.skybox.HasProperty("_GroundColor"))
+            return;
+
+        cycleTime += colorChangeSpeed * Time.deltaTime;
+
+        float r = Mathf.Sin(cycleTime) * 0.25f + 0.25f;
+        float g = Mathf.Sin(cycleTime + Mathf.PI / 3) * 0.25f + 0.25f;
+        float b = Mathf.Sin(cycleTime + 2 * Mathf.PI / 3) * 0.25f + 0.25f;
+
+        Color targetColor = new Color(r, g, b);
+        RenderSettings.skybox.SetColor("_SkyTint", targetColor);
+        RenderSettings.skybox.SetColor("_GroundColor", Color.white - targetColor);
+        if (DirLight)
+        {
+            DirLight.color = targetColor;
+        }
     }
 
     // Update is called once per frame
@@ -74,6 +107,10 @@ public class LevelManager : MonoBehaviour
     public void LevelLoad()
     {
         levelEnd = true;
+
+        cycleTime += 2.0f;
+        CycleSkyColor(true);
+
         
         GameGlobalManager.Instance.ChangeUI(GameGlobalManager.UIState.Game);
         TimeManager.Instance.SetTimePause(true);
@@ -184,6 +221,11 @@ public class LevelManager : MonoBehaviour
             }
 
             LvlIndex += 1;
+            if (!tutorielPassed)
+            {
+                tutorielPassed = true;
+                levelToInstanciate.RemoveAt(0);
+            }
         }
 
         
