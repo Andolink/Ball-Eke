@@ -7,24 +7,28 @@ public class Tutoriel : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI Objtext;
 
-    private string[] Objs =
+    private bool WallJumpTriggered = false;
+
+    private readonly string[] Objs =
     {
         "- [ ] Bouger avec ZQSD.",
         "- [ ] Sauter avec Espace.",
+        "- [ ] Faire un Wall Jump",
         "- [ ] Dash avec A.",
         "- [ ] Ralentir le temps avec Shift.",
         "- [ ] Ramasser quelque chose (viser et utiliser clic droit).",
         "- [ ] Lancer avec clic gauche."
     };
 
-    private string[] Success =
+    private readonly string[] Success =
     {
         "- [X] Bouger avec ZQSD.",
         "- [X] Sauter avec Espace.",
+        "- [X] Faire un Wall Jump",
         "- [X] Dash avec A.",
         "- [X] Ralentir le temps avec Shift.",
-        "- [X] Ramasser l'objet (viser et utiliser clic droit).",
-        "- [X] Lancer l'objet avec clic gauche."
+        "- [X] Ramasser quelque chose (viser et utiliser clic droit).",
+        "- [X] Lancer avec clic gauche."
     };
 
     private int ObjIndex = 0;
@@ -84,24 +88,30 @@ public class Tutoriel : MonoBehaviour
                 }
                 break;
             case 2:
-                if (Input.GetKeyDown(KeyCode.A))
+                if (WallJumpTriggered)
                 {
                     success = true;
                 }
                 break;
             case 3:
-                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                if (Input.GetKeyDown(KeyCode.A))
                 {
                     success = true;
                 }
                 break;
             case 4:
-                if (Input.GetMouseButtonDown(1) && ball.isGrabed) // clic droit
+                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
                     success = true;
                 }
                 break;
             case 5:
+                if (Input.GetMouseButtonDown(1) && ball.isGrabed) // clic droit
+                {
+                    success = true;
+                }
+                break;
+            case 6:
                 if (Input.GetMouseButtonDown(0) && !ball.isGrabed) // clic gauche
                 {
                     success = true;
@@ -133,5 +143,11 @@ public class Tutoriel : MonoBehaviour
     private void FirstObj()
     {
         Objtext.text = Objs[0];
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (ObjIndex == 2)
+            WallJumpTriggered = true;
     }
 }

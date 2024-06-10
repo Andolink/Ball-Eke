@@ -4904,6 +4904,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7801785222479157139}
   - component: {fileID: 8957017246152312157}
+  - component: {fileID: 2310013419780792859}
   m_Layer: 0
   m_Name: TUTORIEL
   m_TagString: Untagged
@@ -4920,8 +4921,8 @@ Transform:
   m_GameObject: {fileID: 1546714996569667528}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 30.830173, y: 31.318937, z: 5.9554114}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 38, y: 17, z: 1}
+  m_LocalScale: {x: 2.3906, y: 2.3906, z: 2.3906}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5025578231796002840}
@@ -4940,7 +4941,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TutoText: {fileID: 5770306593916674326}
   Objtext: {fileID: 6257947587561119437}
+  WallJumpTop: {fileID: 2310013419780792859}
   ball: {fileID: 462020203740419894}
+--- !u!65 &2310013419780792859
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1546714996569667528}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2159229229977051611
 GameObject:
   m_ObjectHideFlags: 0
@@ -4956,7 +4979,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5545833824337357791
 Transform:
   m_ObjectHideFlags: 0
@@ -5109,7 +5132,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8169400940890204862
 Transform:
   m_ObjectHideFlags: 0
